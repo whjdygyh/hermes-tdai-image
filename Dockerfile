@@ -13,34 +13,13 @@ RUN npm install -g @tencentdb-agent-memory/memory-tencentdb@0.3.5 tsx@4.22.0
 # 复制 TDAI Hermes 插件
 RUN cp -r /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/hermes-plugin/memory/memory_tencentdb /opt/hermes/plugins/memory/ 2>/dev/null; echo "Plugin installed"
 
-# 在 entrypoint.sh 前面嵌入 TDAI 自启动逻辑，不动 ENTRYPOINT
-# 关键改进：TDAI 启动失败不应阻止 Hermes 主进程
-RUN cp /opt/hermes/docker/entrypoint.sh /opt/hermes/docker/entrypoint.sh.orig && \
-    printf '%s\n' \
-      '#!/bin/bash' \
-      'set -e' \
-      '' \
-      '# ===== Auto-start TDAI memory gateway =====' \
-      '# TDAI 启动失败不阻断 Hermes 主进程' \
-      'set +e' \
-      'if ! curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then' \
-      '  echo "=== Starting TDAI gateway ==="' \
-      '  mkdir -p /opt/data' \
-      '  cd /opt/data' \
-      '  tsx /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/src/gateway/server.ts &' \
-      '  sleep 4' \
-      '  if curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then' \
-      '    echo "=== TDAI gateway started successfully ==="' \
-      '  else' \
-      '    echo "=== WARNING: TDAI gateway may not have started ==="' \
-      '  fi' \
-      'fi' \
-      'set -e' \
-      '' \
-      '# ===== Original entrypoint =====' \
-      > /opt/hermes/docker/entrypoint.sh && \
-    cat /opt/hermes/docker/entrypoint.sh.orig >> /opt/hermes/docker/entrypoint.sh && \
-    chmod +x /opt/hermes/docker/entrypoint.sh
+# 备份原始 entrypoint（wrapper 需要它）
+RUN cp /opt/hermes/docker/entrypoint.sh /opt/hermes/docker/entrypoint.sh.orig
 
-# 确保 Hermes 以 gateway 模式运行（在 Zeabur 上没有 CMD 覆盖时也会持久运行）
+# 安装 TDAI 启动包装器作为新的 ENTRYPOINT
+# 先启动 TDAI（后台），然后 exec 交给原始 entrypoint
+COPY entrypoint-wrapper.sh /opt/hermes/docker/entrypoint-wrapper.sh
+RUN chmod +x /opt/hermes/docker/entrypoint-wrapper.sh
+
+ENTRYPOINT ["/opt/hermes/docker/entrypoint-wrapper.sh"]
 CMD ["hermes", "gateway", "run"]
