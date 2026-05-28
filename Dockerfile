@@ -41,3 +41,6 @@ RUN cp /opt/hermes/docker/entrypoint.sh /opt/hermes/docker/entrypoint.sh.orig &&
       > /opt/hermes/docker/entrypoint.sh && \
     cat /opt/hermes/docker/entrypoint.sh.orig >> /opt/hermes/docker/entrypoint.sh && \
     chmod +x /opt/hermes/docker/entrypoint.sh
+
+# 确保 Hermes 以 gateway 模式运行（在 Zeabur 上没有 CMD 覆盖时也会持久运行）
+CMD ["hermes", "gateway", "run"]
