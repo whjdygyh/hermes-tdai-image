@@ -27,12 +27,12 @@ RUN cp /opt/hermes/docker/entrypoint.sh /opt/hermes/docker/entrypoint.sh.orig &&
       '  echo "=== Starting TDAI gateway ==="' \
       '  mkdir -p /opt/data' \
       '  cd /opt/data' \
-      '  tsx /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/src/gateway/server.ts > /tmp/tdai.log 2>&1 &' \
+      '  tsx /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/src/gateway/server.ts &' \
       '  sleep 4' \
       '  if curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then' \
       '    echo "=== TDAI gateway started successfully ==="' \
       '  else' \
-      '    echo "=== WARNING: TDAI gateway may not have started - check /tmp/tdai.log ==="' \
+      '    echo "=== WARNING: TDAI gateway may not have started ==="' \
       '  fi' \
       'fi' \
       'set -e' \
