@@ -12,45 +12,37 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
 # 安装 TDAI + tsx（全局安装，不用 npx）
 RUN npm install -g @tencentdb-agent-memory/memory-tencentdb@0.3.5 tsx@4.22.0
 
-# 复制 TDAI Hermes 插件
-RUN cp -r /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/hermes-plugin/memory/memory_tencentdb /opt/hermes/plugins/memory/ 2>/dev/null; echo "Plugin installed"
-
-# 发现真实的 entrypoint 脚本并嵌入 TDAI 自启动
-# v2026.4.30 镜像使用 s6-overlay，entrypoint 路径可能不在 /opt/hermes/docker/
-RUN set -e; \
-    echo "=== Exploring /opt/hermes/docker/ ==="; \
-    ls -laR /opt/hermes/docker/ 2>/dev/null || echo "(directory empty or missing)"; \
-    echo "=== Exploring /etc/s6-overlay/ ==="; \
-    ls -laR /etc/s6-overlay/ 2>/dev/null || echo "(no /etc/s6-overlay)"; \
-    echo "=== Finding ENTRYPOINT script ==="; \
+# 发现 npm 全局模块路径（Debian NodeSource 下可能是 /usr/lib/node_modules/）
+RUN NPM_ROOT=$(npm root -g); \
+    echo "npm global root: $NPM_ROOT"; \
+    TDAI_DIR="$NPM_ROOT/@tencentdb-agent-memory/memory-tencentdb"; \
+    echo "TDAI dir: $TDAI_DIR"; \
+    # 复制 TDAI Hermes 插件 \
+    cp -r "$TDAI_DIR/hermes-plugin/memory/memory_tencentdb" /opt/hermes/plugins/memory/ 2>/dev/null; \
+    echo "Plugin installed"; \
+    # 发现真实的 entrypoint 脚本并嵌入 TDAI 自启动 \
     ENTRY_SCRIPT=""; \
     for candidate in \
-      /opt/hermes/docker/main-wrapper.sh \
       /opt/hermes/docker/entrypoint.sh \
-      /opt/hermes/docker/hermes-entrypoint.sh \
-      /opt/hermes/bin/entrypoint.sh \
+      /opt/hermes/docker/main-wrapper.sh \
       /docker-entrypoint.sh \
     ; do \
       if [ -f "$candidate" ]; then ENTRY_SCRIPT="$candidate"; break; fi; \
     done; \
     if [ -z "$ENTRY_SCRIPT" ]; then \
-      echo "ERROR: No entrypoint found! Listing all scripts:"; \
-      find /opt/hermes /etc -name "*.sh" -type f 2>/dev/null | head -20; \
-      exit 1; \
+      echo "ERROR: No entrypoint found!"; exit 1; \
     fi; \
     echo "Found entrypoint: $ENTRY_SCRIPT"; \
-    echo "=== Last 3 lines of original ==="; \
-    tail -3 "$ENTRY_SCRIPT"; \
+    tail -3 "$ENTRY_SCRIPT" | cat -v; \
     cp "$ENTRY_SCRIPT" "${ENTRY_SCRIPT}.orig"; \
     head -n -1 "${ENTRY_SCRIPT}.orig" > "$ENTRY_SCRIPT"; \
-    printf '%s\n' \
+    printf '%%s\n' \
       '' \
       '# ===== Auto-start TDAI memory gateway =====' \
       'echo "=== [TDAI] Starting memory gateway ==="' \
       'if ! curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then' \
       '  mkdir -p /opt/data' \
-      '  cd /opt/data' \
-      '  tsx /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/src/gateway/server.ts > /tmp/tdai.log 2>&1 &' \
+      "  cd /opt/data && tsx $TDAI_DIR/src/gateway/server.ts > /tmp/tdai.log 2>&1 &" \
       '  sleep 4' \
       '  if curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then' \
       '    echo "=== [TDAI] Gateway started OK ==="' \
