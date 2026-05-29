@@ -29,13 +29,23 @@ jobs:
           echo "✅ Image built successfully"
 
       # ===== Stage 2: Verify structure =====
-      - name: Verify main-wrapper.sh patch
+      - name: Verify entrypoint patch
         run: |
-          echo "=== main-wrapper.sh (last 30 lines) ==="
-          docker run --rm --entrypoint tail hermes-tdai:test -30 /opt/hermes/docker/main-wrapper.sh
+          echo "=== Docker directory listing ==="
+          docker run --rm hermes-tdai:test ls -la /opt/hermes/docker/ 2>/dev/null || echo "(empty)"
           echo ""
-          echo "=== Checking TDAI startup code in wrapper ==="
-          docker run --rm --entrypoint grep hermes-tdai:test "TDAI" /opt/hermes/docker/main-wrapper.sh || echo "⚠️ No TDAI ref in main-wrapper.sh"
+          echo "=== Checking for TDAI patch in entrypoint ==="
+          # Search for TDAI in whatever entrypoint was patched
+          for f in /opt/hermes/docker/main-wrapper.sh /opt/hermes/docker/entrypoint.sh /opt/hermes/docker/hermes-entrypoint.sh /opt/hermes/bin/entrypoint.sh /docker-entrypoint.sh; do
+            if docker run --rm hermes-tdai:test test -f "$f" 2>/dev/null; then
+              echo "=== Found: $f (last 20 lines) ==="
+              docker run --rm --entrypoint tail hermes-tdai:test -20 "$f"
+              echo ""
+              echo "=== TDAI reference check ==="
+              docker run --rm --entrypoint grep hermes-tdai:test "TDAI" "$f" && echo "✅ TDAI patch found!" || echo "⚠️ No TDAI in $f"
+              break
+            fi
+          done
 
       - name: Verify TDAI installation
         run: |

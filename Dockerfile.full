@@ -15,10 +15,34 @@ RUN npm install -g @tencentdb-agent-memory/memory-tencentdb@0.3.5 tsx@4.22.0
 # 复制 TDAI Hermes 插件
 RUN cp -r /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/hermes-plugin/memory/memory_tencentdb /opt/hermes/plugins/memory/ 2>/dev/null; echo "Plugin installed"
 
-# 在 main-wrapper.sh 中嵌入 TDAI 自启动逻辑
-# v2026.4.30 使用 s6-overlay，最终行是 exec s6-setuidgid hermes hermes $@
-RUN cp /opt/hermes/docker/main-wrapper.sh /opt/hermes/docker/main-wrapper.sh.orig && \
-    head -n -1 /opt/hermes/docker/main-wrapper.sh.orig > /opt/hermes/docker/main-wrapper.sh && \
+# 发现真实的 entrypoint 脚本并嵌入 TDAI 自启动
+# v2026.4.30 镜像使用 s6-overlay，entrypoint 路径可能不在 /opt/hermes/docker/
+RUN set -e; \
+    echo "=== Exploring /opt/hermes/docker/ ==="; \
+    ls -laR /opt/hermes/docker/ 2>/dev/null || echo "(directory empty or missing)"; \
+    echo "=== Exploring /etc/s6-overlay/ ==="; \
+    ls -laR /etc/s6-overlay/ 2>/dev/null || echo "(no /etc/s6-overlay)"; \
+    echo "=== Finding ENTRYPOINT script ==="; \
+    ENTRY_SCRIPT=""; \
+    for candidate in \
+      /opt/hermes/docker/main-wrapper.sh \
+      /opt/hermes/docker/entrypoint.sh \
+      /opt/hermes/docker/hermes-entrypoint.sh \
+      /opt/hermes/bin/entrypoint.sh \
+      /docker-entrypoint.sh \
+    ; do \
+      if [ -f "$candidate" ]; then ENTRY_SCRIPT="$candidate"; break; fi; \
+    done; \
+    if [ -z "$ENTRY_SCRIPT" ]; then \
+      echo "ERROR: No entrypoint found! Listing all scripts:"; \
+      find /opt/hermes /etc -name "*.sh" -type f 2>/dev/null | head -20; \
+      exit 1; \
+    fi; \
+    echo "Found entrypoint: $ENTRY_SCRIPT"; \
+    echo "=== Last 3 lines of original ==="; \
+    tail -3 "$ENTRY_SCRIPT"; \
+    cp "$ENTRY_SCRIPT" "${ENTRY_SCRIPT}.orig"; \
+    head -n -1 "${ENTRY_SCRIPT}.orig" > "$ENTRY_SCRIPT"; \
     printf '%s\n' \
       '' \
       '# ===== Auto-start TDAI memory gateway =====' \
@@ -36,7 +60,7 @@ RUN cp /opt/hermes/docker/main-wrapper.sh /opt/hermes/docker/main-wrapper.sh.ori
       'else' \
       '  echo "=== [TDAI] Gateway already running ==="' \
       'fi' \
-      '' >> /opt/hermes/docker/main-wrapper.sh && \
-    tail -n 1 /opt/hermes/docker/main-wrapper.sh.orig >> /opt/hermes/docker/main-wrapper.sh && \
-    chmod +x /opt/hermes/docker/main-wrapper.sh && \
-    echo "main-wrapper.sh patched: $(wc -l < /opt/hermes/docker/main-wrapper.sh) lines"
+      '' >> "$ENTRY_SCRIPT"; \
+    tail -n 1 "${ENTRY_SCRIPT}.orig" >> "$ENTRY_SCRIPT"; \
+    chmod +x "$ENTRY_SCRIPT"; \
+    echo "Patched $ENTRY_SCRIPT: $(wc -l < $ENTRY_SCRIPT) lines"
