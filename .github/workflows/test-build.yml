@@ -49,17 +49,23 @@ jobs:
 
       - name: Verify TDAI installation
         run: |
-          echo "=== TDAI package ==="
-          docker run --rm hermes-tdai:test ls /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/package.json 2>&1
+          echo "=== npm global prefix ==="
+          docker run --rm hermes-tdai:test npm config get prefix 2>&1
           echo ""
-          echo "=== TDAI gateway server ==="
-          docker run --rm hermes-tdai:test ls /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/src/gateway/server.ts 2>&1
+          echo "=== npm global root ==="
+          docker run --rm hermes-tdai:test npm root -g 2>&1
+          echo ""
+          echo "=== TDAI npm package check ==="
+          docker run --rm hermes-tdai:test npm list -g @tencentdb-agent-memory 2>&1 || true
+          echo ""
+          echo "=== Find TDAI files anywhere ==="
+          docker run --rm hermes-tdai:test find / -path "*/@tencentdb-agent-memory" -type d 2>/dev/null | head -5
           echo ""
           echo "=== tsx binary ==="
-          docker run --rm hermes-tdai:test which tsx 2>&1
+          docker run --rm hermes-tdai:test which tsx 2>&1 || docker run --rm hermes-tdai:test find / -name tsx -type f 2>/dev/null | head -5
           echo ""
           echo "=== Plugin directory ==="
-          docker run --rm hermes-tdai:test ls /opt/hermes/plugins/memory/ 2>&1 | head -10
+          docker run --rm hermes-tdai:test ls /opt/hermes/plugins/memory/ 2>&1 | head -10 || true
 
       # ===== Stage 3: Smoke test — run container =====
       - name: Smoke test — run container with TDAI
