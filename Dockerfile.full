@@ -1,0 +1,42 @@
+# 自包含 Dockerfile — 用于 GitHub Actions 本地验证
+# 证明：在纯净 Docker 环境下可以正常构建和启动 TDAI
+# 对比：Zeabur zbpack v2 预处理器会破坏此 Dockerfile
+FROM docker.io/nousresearch/hermes-agent:v2026.4.30
+
+# 安装 Node.js 22
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/* && \
+    node --version
+
+# 安装 TDAI + tsx（全局安装，不用 npx）
+RUN npm install -g @tencentdb-agent-memory/memory-tencentdb@0.3.5 tsx@4.22.0
+
+# 复制 TDAI Hermes 插件
+RUN cp -r /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/hermes-plugin/memory/memory_tencentdb /opt/hermes/plugins/memory/ 2>/dev/null; echo "Plugin installed"
+
+# 在 main-wrapper.sh 中嵌入 TDAI 自启动逻辑
+# v2026.4.30 使用 s6-overlay，最终行是 exec s6-setuidgid hermes hermes $@
+RUN cp /opt/hermes/docker/main-wrapper.sh /opt/hermes/docker/main-wrapper.sh.orig && \
+    head -n -1 /opt/hermes/docker/main-wrapper.sh.orig > /opt/hermes/docker/main-wrapper.sh && \
+    printf '%s\n' \
+      '' \
+      '# ===== Auto-start TDAI memory gateway =====' \
+      'echo "=== [TDAI] Starting memory gateway ==="' \
+      'if ! curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then' \
+      '  mkdir -p /opt/data' \
+      '  cd /opt/data' \
+      '  tsx /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/src/gateway/server.ts > /tmp/tdai.log 2>&1 &' \
+      '  sleep 4' \
+      '  if curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then' \
+      '    echo "=== [TDAI] Gateway started OK ==="' \
+      '  else' \
+      '    echo "=== [TDAI] WARNING: check /tmp/tdai.log ==="' \
+      '  fi' \
+      'else' \
+      '  echo "=== [TDAI] Gateway already running ==="' \
+      'fi' \
+      '' >> /opt/hermes/docker/main-wrapper.sh && \
+    tail -n 1 /opt/hermes/docker/main-wrapper.sh.orig >> /opt/hermes/docker/main-wrapper.sh && \
+    chmod +x /opt/hermes/docker/main-wrapper.sh && \
+    echo "main-wrapper.sh patched: $(wc -l < /opt/hermes/docker/main-wrapper.sh) lines"

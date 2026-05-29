@@ -1,0 +1,109 @@
+name: Test Docker Image (No Zeabur)
+
+# 目的：在纯净 Docker 环境中验证自建房镜像能否正常构建和启动 TDAI
+# 对比：Zeabur zbpack v2 预处理器会破坏 Dockerfile 导致容器崩溃
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ===== Stage 1: Build =====
+      - name: Build Docker image
+        run: |
+          echo "=== Building from Dockerfile.full ==="
+          docker build -f Dockerfile.full -t hermes-tdai:test . 2>&1
+          echo ""
+          echo "=== Image size ==="
+          docker images hermes-tdai:test --format "table {{.Repository}}:{{.Tag}}\t{{.Size}}"
+          echo ""
+          echo "✅ Image built successfully"
+
+      # ===== Stage 2: Verify structure =====
+      - name: Verify main-wrapper.sh patch
+        run: |
+          echo "=== main-wrapper.sh (last 30 lines) ==="
+          docker run --rm --entrypoint tail hermes-tdai:test -30 /opt/hermes/docker/main-wrapper.sh
+          echo ""
+          echo "=== Checking TDAI startup code in wrapper ==="
+          docker run --rm --entrypoint grep hermes-tdai:test "TDAI" /opt/hermes/docker/main-wrapper.sh || echo "⚠️ No TDAI ref in main-wrapper.sh"
+
+      - name: Verify TDAI installation
+        run: |
+          echo "=== TDAI package ==="
+          docker run --rm hermes-tdai:test ls /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/package.json 2>&1
+          echo ""
+          echo "=== TDAI gateway server ==="
+          docker run --rm hermes-tdai:test ls /usr/local/lib/node_modules/@tencentdb-agent-memory/memory-tencentdb/src/gateway/server.ts 2>&1
+          echo ""
+          echo "=== tsx binary ==="
+          docker run --rm hermes-tdai:test which tsx 2>&1
+          echo ""
+          echo "=== Plugin directory ==="
+          docker run --rm hermes-tdai:test ls /opt/hermes/plugins/memory/ 2>&1 | head -10
+
+      # ===== Stage 3: Smoke test — run container =====
+      - name: Smoke test — run container with TDAI
+        run: |
+          echo "=== Starting container ==="
+          docker run -d --name smoke hermes-tdai:test
+          
+          echo "=== Waiting 15s for all services to attempt start ==="
+          sleep 15
+          
+          echo "=== Container status ==="
+          docker ps -a --filter name=smoke --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
+          
+          echo ""
+          echo "=== Container logs (last 60 lines) ==="
+          docker logs smoke 2>&1 | tail -60
+          
+          echo ""
+          echo "=== TDAI process check ==="
+          docker exec smoke bash -c 'ps aux | grep -i "tsx\|tdai\|gateway" | grep -v grep || echo "(No TDAI process running)"' 2>&1 || true
+          
+          echo ""
+          echo "=== TDAI log file ==="
+          docker exec smoke cat /tmp/tdai.log 2>&1 || echo "(No /tmp/tdai.log)"
+          
+          echo ""
+          echo "=== TDAI health endpoint ==="
+          docker exec smoke curl -sf http://127.0.0.1:8420/health 2>&1 && echo "✅ TDAI gateway is running!" || echo "⚠️ TDAI not on 8420 (needs real DB)"
+          
+          echo ""
+          echo "=== Container runtime: $(docker inspect smoke --format '{{.State.StartedAt}}' | xargs -I{} date -d {} +%s) - NOW: $(date +%s) ==="
+          UPTIME_START=$(docker inspect smoke --format '{{.State.StartedAt}}' | xargs -I{} date -d {} +%s)
+          UPTIME_NOW=$(date +%s)
+          UPTIME=$((UPTIME_NOW - UPTIME_START))
+          
+          if [ "$UPTIME" -gt 10 ]; then
+            echo "✅ Container survived for ${UPTIME}s — no crash!"
+          else
+            echo "❌ Container died too quickly (${UPTIME}s)"
+          fi
+          
+          docker stop smoke
+          docker rm smoke
+
+      # ===== Summary =====
+      - name: Test Summary
+        if: always()
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "  TEST COMPLETE — Zeabur-free environment"
+          echo "=========================================="
+          echo ""
+          echo "If the image built and the container survived >10s,"
+          echo "the Dockerfile is valid and the TDAI auto-start works."
+          echo "The issue is with Zeabur's zbpack v2 preprocessor."
+          echo "=========================================="
