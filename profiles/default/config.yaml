@@ -29,7 +29,7 @@ providers:
 
 # ── TTS / Voice ─────────────────────────────────────────────────────
 tts:
-  provider: volcengine-warm
+  provider: gemini-zh-std-c
   edge:
     voice: en-US-AriaNeural
   elevenlabs:
@@ -101,6 +101,30 @@ tts:
       command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95
       output_format: ogg
       voice: ICL_zh_male_shenmi_v1_tob
+      max_text_length: 5000
+    gemini-zh-std-c:
+      type: command
+      command: python3 /opt/data/scripts/gemini_tts.py -t {text_path} -o {output_path} -v zh-CN-Standard-C
+      output_format: ogg
+      voice: zh-CN-Standard-C
+      max_text_length: 5000
+    gemini-zh-std-d:
+      type: command
+      command: python3 /opt/data/scripts/gemini_tts.py -t {text_path} -o {output_path} -v zh-CN-Standard-D
+      output_format: ogg
+      voice: zh-CN-Standard-D
+      max_text_length: 5000
+    gemini-en-std-c:
+      type: command
+      command: python3 /opt/data/scripts/gemini_tts.py -t {text_path} -o {output_path} -v en-US-Standard-C
+      output_format: ogg
+      voice: en-US-Standard-C
+      max_text_length: 5000
+    gemini-en-std-d:
+      type: command
+      command: python3 /opt/data/scripts/gemini_tts.py -t {text_path} -o {output_path} -v en-US-Standard-D
+      output_format: ogg
+      voice: en-US-Standard-D
       max_text_length: 5000
 
 stt:
