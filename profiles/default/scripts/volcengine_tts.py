@@ -29,8 +29,10 @@ for var in ['http_proxy', 'https_proxy', 'HTTP_PROXY', 'HTTPS_PROXY', 'all_proxy
 import requests
 
 
-API_KEY="9025a361-6a59-47ab-a131-20f1ac66be45"
-APP_ID = "9768463927"
+# Volcengine TTS API 凭证
+# 可通过 VOLC_API_KEY 环境变量覆盖（推荐），否则使用内置默认 Key
+VOLC_APP_ID = os.environ.get("VOLC_APP_ID", "9768463927")
+VOLC_API_KEY = os.environ.get("VOLC_API_KEY", "9025a361-6a59-47ab-a131-20f1ac66be45")
 DEFAULT_VOICE = "ICL_zh_male_tiexinnanyou_tob"
 ENDPOINT = "https://openspeech.bytedance.com/api/v1/tts"
 
@@ -90,11 +92,11 @@ def main():
     # Call Volcengine TTS API
     headers = {
         "Content-Type": "application/json",
-        "X-Api-Key": API_KEY,
+        "X-Api-Key": VOLC_API_KEY,
     }
 
     payload = {
-        "app": {"appid": APP_ID, "cluster": "volcano_tts"},
+        "app": {"appid": VOLC_APP_ID, "cluster": "volcano_tts"},
         "user": {"uid": "hermes_tts"},
         "request": {
             "reqid": str(uuid.uuid4()),
