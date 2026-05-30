@@ -73,9 +73,8 @@ COPY profiles/default/scripts /opt/data/scripts
 # 默认配置（支持 ${ENV_VAR} 模板变量，部署时通过 env 注入）
 COPY profiles/default/config.yaml /opt/data/config.yaml
 
-# 角色设定与灵魂文档（可选，部署时可被 env 覆盖）
+# 角色设定与灵魂文档（通用版，部署时可被 env 覆盖）
 COPY profiles/default/SOUL.md /opt/data/SOUL.md
-COPY profiles/default/character_bio.md /opt/data/character_bio.md
 
 # 设置权限
 RUN chmod -R o+r /opt/data/ 2>/dev/null; echo "permissions set"
