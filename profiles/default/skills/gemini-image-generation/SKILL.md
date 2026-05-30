@@ -34,16 +34,19 @@ Content-Type: application/json
 
 ## API Key Location
 
-The API key is stored in memory (user provided it inline). To retrieve it, search past session memory:
-- When first discussed, user said: `API_KEY=AIzaSyC...`
+The API key is available via the **`$GOOGLE_API_KEY`** environment variable, which is configured at the Zeabur/container level. Read it directly:
+
+- **Bash:** `$GOOGLE_API_KEY`
+- **Python:** `os.environ.get("GOOGLE_API_KEY")`
 - It's a Gemini API key, starts with `AIzaSy`
+- **Do NOT ask the user for the key** — it's already set in the environment.
 
 ## Text-to-Image Usage
 
 ```python
-import requests, json, base64
+import requests, json, base64, os
 
-API_KEY = "your-key-here"
+API_KEY = os.environ.get("GOOGLE_API_KEY", "")  # From env var, no need to ask user
 MODEL = "gemini-3.1-flash-image-preview"
 URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={API_KEY}"
 
