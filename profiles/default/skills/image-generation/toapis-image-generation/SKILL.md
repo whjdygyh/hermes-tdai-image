@@ -52,27 +52,18 @@ metadata:
 
 ### ⚠️ PITFALL: API key not in config (first-time setup)
 
-The toapis API key may be stored under **two different names** depending on when it was set up:
+The toapis API key is available via the **`$TOAPIS_API_KEY`** environment variable (configured at deployment level).
+Do NOT search for local config files — they don't exist in Zeabur containers.
 
-**Check config.json (`cat ~/.hermes/profiles/lover/config.json`) for either:**
-```json
-{
-  "toapis_api_key": "sk-...SAyO",        // preferred name — may be blank/provided by user
-  "image20_api_key": "sk-...SAyO",       // actual stored name from older setup ✅
-  "image20_endpoint": "https://toapis.com/v1",
-  "image20_model": "gpt-4o-image"        // IGNORE this model — use gpt-image-2 instead
-}
+**In Python, read it directly:**
+```python
+import os
+API_KEY = os.environ.get("TOAPIS_API_KEY", "")
+if not API_KEY:
+    print("TOAPIS_API_KEY not set in env — fall back to Gemini with GOOGLE_API_KEY")
 ```
 
-The config.json uses **`image20_api_key`** as the key name, not `toapis_api_key`. If you only search for `toapis_api_key`, you'll miss it and think the key is missing.
-
-**If still not found, check 重要记事.md:**
-```bash
-cat ~/.hermes/profiles/lover/notes/重要记事.md
-```
-The user may have noted the key there. If absent from both, tell the user.
-
-**Still stuck?** Google (generativelanguage.googleapis.com, aistudio.google.com) is **completely unreachable** from this WSL environment (exit code 7, failed to connect). The toapis gateway via SOCKS5 proxy is the **only viable image generation path** — no Gemini fallback, no key to generate.
+If `$TOAPIS_API_KEY` is not set, tell the user or fall back to Gemini image generation using `$GOOGLE_API_KEY`.
 
 ### ⚠️ PITFALL: DOUBLE /v1/ IN URL (Wasted ~3 minutes debugging this)
 
