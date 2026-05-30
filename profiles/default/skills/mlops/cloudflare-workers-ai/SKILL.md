@@ -2,7 +2,6 @@
 name: cloudflare-workers-ai
 description: Use Cloudflare Workers AI for free image generation — text-to-image, model comparison, API calling patterns, free tier limits, and album integration path
 version: 1.0.0
-author: Lover
 metadata:
   hermes:
     tags: [cloudflare, workers-ai, image-generation, free-tier, flux]

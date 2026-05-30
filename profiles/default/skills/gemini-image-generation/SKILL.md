@@ -2,7 +2,6 @@
 name: gemini-image-generation
 description: Generate images using Google Gemini's native image generation API (gemini-3.1-flash-image-preview). No local GPU required, no VRAM constraints, no model downloads. Supports text2img and img2img with reference photos.
 version: 4.0.0
-author: Lover
 license: MIT
 metadata:
   hermes:

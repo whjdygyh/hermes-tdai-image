@@ -2,7 +2,6 @@
 name: toapis-image-generation
 description: Generate images via toapis.com API gateway — OpenAI-compatible gateway supporting GPT-Image-2 (image2.0) and Gemini image models. Async task-based generation with image upload workflow. SOCKS5 proxy required for API calls.
 version: 1.1.0
-author: Lover
 metadata:
   hermes:
     tags: [toapis, image-generation, api-gateway, gpt-image-2, async]
