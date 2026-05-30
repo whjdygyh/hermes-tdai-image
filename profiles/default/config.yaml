@@ -190,6 +190,16 @@ terminal:
   container_memory: 5120
   container_disk: 51200
 
+# ── Auxiliary (Vision / TTS 模型配置) ─────────────────────────────
+# 配置 vision_analyze 和 text_to_speech 的内置工具使用的模型
+auxiliary:
+  vision:
+    provider: google
+    model: gemini-2.5-flash
+  audio:
+    provider: deepseek
+    model: deepseek-v4-flash
+
 # ── Channels ────────────────────────────────────────────────────────
 feishu:
   allow_all_users: true
