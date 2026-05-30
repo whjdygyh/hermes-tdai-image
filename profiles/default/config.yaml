@@ -1,0 +1,191 @@
+# ── Hermes Default Profile Config ──
+# Built into the hermes-tdai image for one-click deployment
+# Values that should come from env vars use ${VAR_NAME} syntax
+
+model:
+  default: deepseek-v4-flash
+  provider: deepseek
+  context_length: 65536
+
+providers:
+  deepseek:
+    api_key: ${DEEPSEEK_API_KEY}
+    base_url: https://api.deepseek.com/v1
+    default_model: deepseek-v4-flash
+    extra_body:
+      cache_prompt: true
+      chat_template_kwargs:
+        enable_thinking: false
+  xiaomi:
+    api_key: ${XIAOMI_API_KEY}
+    base_url: https://api.xiaomimimo.com/v1
+    default_model: mimo-v2-flash
+  minimax:
+    api_key: ${MINIMAX_API_KEY}
+    base_url: https://api.minimax.chat/v1
+  google:
+    api_key: ${GOOGLE_API_KEY}
+    default_model: gemini-2.5-flash
+
+# ── TTS / Voice ─────────────────────────────────────────────────────
+tts:
+  provider: volcengine-warm
+  edge:
+    voice: en-US-AriaNeural
+  elevenlabs:
+    voice_id: pNInz6obpgDQGcFmaJgB
+    model_id: eleven_multilingual_v2
+  openai:
+    model: gpt-4o-mini-tts
+    voice: alloy
+  xai:
+    voice_id: eve
+    language: en
+    sample_rate: 24000
+    bit_rate: 128000
+  mistral:
+    model: voxtral-mini-tts-2603
+    voice_id: c69964a6-ab8b-4f8a-9465-ec0925096ec8
+  neutts:
+    ref_audio: ""
+    ref_text: ""
+    model: neuphonic/neutts-air-q4-gguf
+    device: cpu
+  piper:
+    voice: en_US-lessac-medium
+  providers:
+    volcengine-tiexin:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: ICL_zh_male_tiexinnanyou_tob
+      max_text_length: 5000
+    volcengine-pillow:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: ICL_zh_male_asmryexiu_tob
+      max_text_length: 5000
+    volcengine-lengku-intimate:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95 -e intimate
+      output_format: ogg
+      voice: zh_male_lengkugege_emo_v2_mars_bigtts::intimate
+      max_text_length: 5000
+    volcengine-warm:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 1.2 -p 0.95
+      output_format: ogg
+      voice: zh_male_wennuanahu_uranus_bigtts
+      max_text_length: 5000
+    volcengine-sunshine:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: zh_male_qingyiyuxuan_mars_bigtts
+      max_text_length: 5000
+    volcengine-diyinchenyu:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: ICL_zh_male_diyinchenyu_tob
+      max_text_length: 5000
+    volcengine-mengdong:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: ICL_zh_male_mengdongqingnian_tob
+      max_text_length: 5000
+    volcengine-jiling:
+      type: command
+      command: python3 /opt/data/scripts/volcengine_tts.py -t {text_path} -o {output_path} -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: ICL_zh_male_shenmi_v1_tob
+      max_text_length: 5000
+
+stt:
+  enabled: true
+  provider: local
+  local:
+    model: base
+    language: ""
+  openai:
+    model: whisper-1
+  mistral:
+    model: voxtral-mini-latest
+
+voice:
+  record_key: ctrl+b
+  max_recording_seconds: 120
+  auto_tts: false
+
+# ── Memory (TDAI) ───────────────────────────────────────────────────
+memory:
+  memory_enabled: true
+  memory_char_limit: 2200
+  providers:
+    - provider: memory_tencentdb
+      config:
+        db_type: postgres
+        db_config:
+          llm_model: deepseek-v4-flash
+          llm_provider: deepseek
+        args:
+          db_host: ${MEMORY_DB_HOST:-127.0.0.1}
+          db_port: ${MEMORY_DB_PORT:-8420}
+          db_url: ${MEMORY_DB_URL:-http://127.0.0.1:8420}
+          api_key: ${MEMORY_DB_API_KEY:-}
+      enabled: true
+  default_provider: memory_tencentdb
+
+# ── Skills ──────────────────────────────────────────────────────────
+skills:
+  external_dirs:
+    - /opt/data/skills
+  template_vars: true
+  inline_shell: false
+  inline_shell_timeout: 10
+  guard_agent_created: false
+
+enabled_toolsets:
+  - file
+  - terminal
+  - search
+  - web
+  - skills
+  - session_search
+  - todo
+
+# ── Terminal ────────────────────────────────────────────────────────
+terminal:
+  backend: local
+  modal_mode: auto
+  cwd: .
+  timeout: 180
+  container_persistent: true
+  container_memory: 5120
+  container_disk: 51200
+
+# ── Channels ────────────────────────────────────────────────────────
+feishu:
+  allow_all_users: true
+  app_id: ${FEISHU_APP_ID}
+  app_secret: ${FEISHU_APP_SECRET}
+
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      host: 0.0.0.0
+      port: 8644
+
+# ── Personality ─────────────────────────────────────────────────────
+personality: default
+
+# ── Agent ───────────────────────────────────────────────────────────
+agent:
+  max_turns: 90
+  gateway_timeout: 1800
+  api_max_retries: 3
+  tool_use_enforcement: auto
+  image_input_mode: auto

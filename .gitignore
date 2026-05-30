@@ -1,0 +1,5 @@
+# Hermes runtime artifacts
+profiles/default/skills/.curator_*
+profiles/default/skills/.bundled_manifest
+profiles/default/skills/.usage.json
+profiles/default/skills/.usage.json.lock

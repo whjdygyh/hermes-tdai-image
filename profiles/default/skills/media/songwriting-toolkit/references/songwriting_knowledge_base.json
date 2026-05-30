@@ -1,0 +1,1530 @@
+{
+  "meta": {
+    "title": "歌曲创作专业知识库 - Songwriting Knowledge Base",
+    "description": "为HeartMuLa音乐生成模型提供的结构化歌曲创作知识，涵盖流派、歌词、结构、声乐、乐器、民族音乐、多语言作词",
+    "version": "1.0.0",
+    "target_model": "HeartMuLa (lyrics + tags generation)",
+    "last_updated": "2026-05-14"
+  },
+
+  "global_music_genres": {
+    "description": "全球音乐流派知识库，含速度BPM、乐器、节奏型、情感氛围、代表人物",
+    "genres": {
+      "rock": {
+        "description": "摇滚乐 - 源自1950年代美国，以强节奏、电吉他驱动、反叛精神为核心",
+        "subgenres": {
+          "hard_rock": {
+            "bpm_range": [100, 160],
+            "typical_instruments": ["电吉他(失真)", "电贝斯", "鼓组(重击)", "主唱(高亢)"],
+            "typical_rhythm": "4/4拍, 强力三和弦驱动, 底鼓压重拍, 16分音符镲片",
+            "emotional_atmosphere": "力量感, 叛逆, 激情, 宣泄",
+            "representative_artists": ["AC/DC", "Led Zeppelin", "Guns N' Roses", "Deep Purple", "Aerosmith"],
+            "typical_tags": ["powerful", "rebellious", "electric-guitar-driven", "heavy-drums", "high-energy"]
+          },
+          "alternative_rock": {
+            "bpm_range": [80, 140],
+            "typical_instruments": ["电吉他(清音/轻度失真)", "贝斯", "鼓组", "主唱(个性音色)"],
+            "typical_rhythm": "4/4拍为主, 切分音常见, 动态对比强烈",
+            "emotional_atmosphere": "内省, 独立, 实验性, 情绪化",
+            "representative_artists": ["Radiohead", "Nirvana", "R.E.M.", "Foo Fighters", "The Smashing Pumpkins"],
+            "typical_tags": ["introspective", "grunge", "indie-spirit", "dynamic-contrast", "raw-emotion"]
+          },
+          "psychedelic_rock": {
+            "bpm_range": [60, 130],
+            "typical_instruments": ["电吉他(回响/相位效果)", "哈蒙德风琴", "西塔琴", "鼓组(迷幻感)", "合成器"],
+            "typical_rhythm": "4/4拍, 变速常见, 自由节奏段落, 不规则拍号",
+            "emotional_atmosphere": "迷幻, 超现实, 太空感, 意识扩张",
+            "representative_artists": ["Pink Floyd", "Jimi Hendrix", "The Doors", "The Beatles(后期)", "Grateful Dead"],
+            "typical_tags": ["trippy", "surreal", "space-rock", "reverb-heavy", "mind-expanding"]
+          },
+          "post_rock": {
+            "bpm_range": [40, 160],
+            "typical_instruments": ["电吉他(大量效果器)", "贝斯", "鼓组(渐进式)", "小提琴/大提琴", "钢琴/键盘"],
+            "typical_rhythm": "渐进式, 从慢到快, 爆发式高潮, 不规则拍号",
+            "emotional_atmosphere": "氛围感, 史诗感, 忧伤, 宏大叙事",
+            "representative_artists": ["Sigur Rós", "Mogwai", "Explosions in the Sky", "Godspeed You! Black Emperor"],
+            "typical_tags": ["atmospheric", "crescendo-core", "instrumental-focus", "cinematic", "build-up-heavy"]
+          },
+          "garage_rock": {
+            "bpm_range": [120, 180],
+            "typical_instruments": ["电吉他(粗糙失真)", "贝斯", "鼓组(简单粗暴)", "主唱(未经修饰)"],
+            "typical_rhythm": "4/4拍, 简单直给, 低 fidelity 感",
+            "emotional_atmosphere": "粗粝, 原始, 直接, 地下感",
+            "representative_artists": ["The White Stripes", "The Strokes", "The Kinks", "Ty Segall"],
+            "typical_tags": ["lo-fi", "raw", "gritty", "minimalist", "garage-sound"]
+          },
+          "metal": {
+            "bpm_range": [80, 240],
+            "typical_instruments": ["电吉他(高增益失真)", "贝斯(重型)", "鼓组(双底鼓)", "主唱(嘶吼/清嗓)"],
+            "typical_rhythm": "4/4拍, 2/4拍, 切分音, 快速三连音, 复合拍号",
+            "emotional_atmosphere": "侵略性, 黑暗, 力量, 史诗感",
+            "representative_artists": ["Metallica", "Black Sabbath", "Iron Maiden", "Slayer", "Megadeth"],
+            "typical_tags": ["heavy", "aggressive", "distorted-guitar", "double-bass-drums", "screaming-vocals"]
+          },
+          "punk_rock": {
+            "bpm_range": [160, 220],
+            "typical_instruments": ["电吉他(快速扫弦)", "贝斯", "鼓组(快速击打)", "主唱(喊唱)"],
+            "typical_rhythm": "4/4拍, 快速下扫, 三和弦进行, 极少独奏",
+            "emotional_atmosphere": "反叛, 愤怒, 直白, 极简",
+            "representative_artists": ["Ramones", "Sex Pistols", "The Clash", "Green Day", "Blink-182"],
+            "typical_tags": ["fast", "rebellious", "three-chord", "anti-establishment", "high-energy"]
+          },
+          "progressive_rock": {
+            "bpm_range": [40, 200],
+            "typical_instruments": ["电吉他(多效果)", "合成器", "键盘/钢琴", "贝斯(复杂线条)", "鼓组(复杂节奏)"],
+            "typical_rhythm": "变化拍号(5/4, 7/8, 9/8等), 复杂节奏型, 变速频繁",
+            "emotional_atmosphere": "史诗感, 智性, 复杂, 交响感",
+            "representative_artists": ["Yes", "King Crimson", "Genesis", "Rush", "Tool"],
+            "typical_tags": ["complex-time-signatures", "long-compositions", "virtuosic", "symphonic", "conceptual"]
+          }
+        }
+      },
+
+      "pop": {
+        "description": "流行音乐 - 以旋律至上、易于传播为特征，商业性最强的音乐类型",
+        "subgenres": {
+          "synth_pop": {
+            "bpm_range": [100, 140],
+            "typical_instruments": ["模拟合成器", "鼓机/Roland TR-808/909", "电贝斯(合成音色)", "主唱(清亮)"],
+            "typical_rhythm": "4/4拍, 16分音符Hi-hat, 底鼓4 on the floor",
+            "emotional_atmosphere": "未来感, 舞动, 明亮, 略带疏离",
+            "representative_artists": ["Depeche Mode", "Pet Shop Boys", "New Order", "CHVRCHES", "The Human League"],
+            "typical_tags": ["synth-heavy", "danceable", "electronic-organic", "retro-future", "crisp"]
+          },
+          "dream_pop": {
+            "bpm_range": [70, 120],
+            "typical_instruments": ["电吉他(合唱/混响)", "合成器(空灵音色)", "贝斯(流动线条)", "鼓组(轻击)", "主唱(气声/飘渺)"],
+            "typical_rhythm": "4/4拍, 柔和的镲片, 节奏延缓, 模糊的鼓点",
+            "emotional_atmosphere": "梦幻, 飘渺, 怀旧, 浪漫",
+            "representative_artists": ["Cocteau Twins", "Beach House", "Slowdive", "Mazzy Star", "My Bloody Valentine"],
+            "typical_tags": ["ethereal", "shoegaze", "reverb-drenched", "hazy", "romantic"]
+          },
+          "electropop": {
+            "bpm_range": [110, 150],
+            "typical_instruments": ["软件合成器", "鼓机", "Auto-Tune/Vocoder", "采样器", "贝斯合成器"],
+            "typical_rhythm": "4/4拍, 强节拍, 电子鼓音色, 量化精准",
+            "emotional_atmosphere": "欢快, 能量感, 现代, 精致",
+            "representative_artists": ["Lady Gaga", "Kylie Minogue", "Robyn", "Charli XCX", "Dua Lipa"],
+            "typical_tags": ["bouncy", "auto-tune", "dancefloor", "glossy-production", "catchy-hooks"]
+          },
+          "bubblegum_pop": {
+            "bpm_range": [120, 150],
+            "typical_instruments": ["键盘/合成器", "鼓机", "吉他(轻扫)", "贝斯(简单线条)", "合唱团"],
+            "typical_rhythm": "4/4拍, 简单直接, 弱拍强调, 舞曲节奏",
+            "emotional_atmosphere": "快乐, 无忧无虑, 青少年感, 上瘾旋律",
+            "representative_artists": ["Britney Spears", "Backstreet Boys", "Taylor Swift(早期)", "Ariana Grande", "Katy Perry"],
+            "typical_tags": ["catchy", "uplifting", "teen-vibe", "earworm-melody", "radio-friendly"]
+          },
+          "bedroom_pop": {
+            "bpm_range": [60, 110],
+            "typical_instruments": ["键盘/软件合成器", "鼓机(低保真)", "吉他(简单录制)", "主唱(亲密感)", "环境音采样"],
+            "typical_rhythm": "4/4拍, 松散的量化, 低保真鼓声, 切分音",
+            "emotional_atmosphere": "亲密, 私密, 自省, 居家感",
+            "representative_artists": ["Clairo", "Rex Orange County", "girl in red", "Beabadoobee", "Cuco"],
+            "typical_tags": ["lo-fi", "intimate", "diary-like", "soft-vocals", "home-recorded"]
+          }
+        }
+      },
+
+      "electronic": {
+        "description": "电子音乐 - 以电子乐器、合成器、鼓机、数字音色为核心",
+        "subgenres": {
+          "house": {
+            "bpm_range": [118, 135],
+            "typical_instruments": ["鼓机(Roland TR-909)", "贝斯合成器", "钢琴/键盘", "弦乐叠加", "主唱/Soul女声采样"],
+            "typical_rhythm": "4/4拍, 4 on the floor底鼓, off-beat Hi-hat, 每拍Clap",
+            "emotional_atmosphere": "律动, 温暖, 地下舞池, 灵魂感",
+            "representative_artists": ["Frankie Knuckles", "Daft Punk", "Marshall Jefferson", "CamelPhat", "Solomun"],
+            "typical_tags": ["four-on-the-floor", "groovy", "deep-bassline", "soulful", "club-ready"]
+          },
+          "techno": {
+            "bpm_range": [120, 150],
+            "typical_instruments": ["鼓机(Roland TR-909/808)", "贝斯合成器(酸性)", "模块合成器", "打击乐合成器", "效果处理器"],
+            "typical_rhythm": "4/4拍, 机械化节拍, 底鼓直击, 最小化变化, 重复性模式",
+            "emotional_atmosphere": "黑暗, 工业感, 催眠, 未来感",
+            "representative_artists": ["Jeff Mills", "Carl Cox", "Nina Kraviz", "Adam Beyer", "Charlotte de Witte"],
+            "typical_tags": ["driving", "industrial", "hypnotic", "minimal", "dark-atmosphere"]
+          },
+          "trance": {
+            "bpm_range": [125, 150],
+            "typical_instruments": ["合成器(主旋律)", "贝斯合成器(滚动)", "鼓机", "钢琴(情感化)", "人声(飘渺)"],
+            "typical_rhythm": "4/4拍, 16分音符滚动贝斯, 渐强Build-up, 高潮Drop",
+            "emotional_atmosphere": "迷幻, 升华, 史诗感, 情感宣泄",
+            "representative_artists": ["Armin van Buuren", "Tiësto", "Paul van Dyk", "Above & Beyond", "Aly & Fila"],
+            "typical_tags": ["euphoric", "build-up-heavy", "melodic", "uplifting", "anthemic"]
+          },
+          "dubstep": {
+            "bpm_range": [70, 150],
+            "tempo_perception": "半速感知, 实际BPM 140-150但节奏感知为70-75",
+            "typical_instruments": ["合成器(Wobble Bass)", "鼓机(重击)", "采样器", "贝斯合成器(次低频)"],
+            "typical_rhythm": "2-step节奏, 切分音, Half-time鼓, 激烈Wobble模式交互",
+            "emotional_atmosphere": "黑暗, 重低音冲击, 破坏性, 能量爆发",
+            "representative_artists": ["Skrillex", "Benga", "Burial", "Excision", "Zeds Dead"],
+            "typical_tags": ["wobble-bass", "heavy-drop", "half-time", "sub-bass", "aggressive"]
+          },
+          "ambient": {
+            "bpm_range": [30, 80],
+            "typical_instruments": ["合成器(Pad音色)", "采样器(环境音)", "钢琴(稀疏)", "弦乐(长音)", "田野录音"],
+            "typical_rhythm": "无固定节奏, 自由浮动, 环境音纹理, 极少打击乐",
+            "emotional_atmosphere": "宁静, 冥想, 空间感, 超然",
+            "representative_artists": ["Brian Eno", "Aphex Twin(Selected Ambient Works)", "Stars of the Lid", "Harold Budd", "Hiroshi Yoshimura"],
+            "typical_tags": ["atmospheric", "meditative", "drone", "space", "textural"]
+          },
+          "drum_and_bass": {
+            "bpm_range": [160, 180],
+            "typical_instruments": ["鼓机(快速Breakbeat)", "贝斯合成器(滚动的sub)", "合成器(氛围)", "采样器", "人声(切碎)"],
+            "typical_rhythm": "双倍速Breakbeat, 密集16分音符Hi-hat, 加速的Amen Break采样, 贝斯与鼓交互",
+            "emotional_atmosphere": "急促, 高强度, 地下, 未来感",
+            "representative_artists": ["Goldie", "Roni Size", "Pendulum", "LTJ Bukem", "Noisia"],
+            "typical_tags": ["fast-breakbeats", "high-bpm", "rolling-bass", "jungle-influence", "intricate-drums"]
+          },
+          "lo-fi_hiphop": {
+            "bpm_range": [70, 100],
+            "typical_instruments": ["鼓机(SP-404/MPC)", "采样器(老唱片)", "钢琴/键盘(温暖)", "贝斯(柔滑)", "环境音(雨声/炒菜声)"],
+            "typical_rhythm": "切分音Lo-fi鼓, Vinyl crackle, Swing量化, 松弛的节奏感",
+            "emotional_atmosphere": "放松, 怀旧, 温暖, 学习/工作背景",
+            "representative_artists": ["J Dilla", "Nujabes", "lofi girl", "Tomppabeats", "Idealism"],
+            "typical_tags": ["chill", "vinyl-crackle", "study-beats", "hip-hop-instrumental", "nostalgic"]
+          }
+        }
+      },
+
+      "hip_hop": {
+        "description": "嘻哈音乐 - 以说唱(Rap)、采样、节拍为核心，源自1970年代纽约布朗克斯",
+        "subgenres": {
+          "golden_age_hiphop": {
+            "bpm_range": [85, 110],
+            "typical_instruments": ["鼓机(SP-1200/MPC60)", "采样器(Funk/Soul切片)", "贝斯", "唱盘机(搓碟)", "主唱(叙事说唱)"],
+            "typical_rhythm": "Boom-bap节奏, 重Kick和Snare, 切分音, 采样Loop",
+            "emotional_atmosphere": "街头智慧, 叙事性, 自豪, 政治意识",
+            "representative_artists": ["Nas", "A Tribe Called Quest", "Wu-Tang Clan", "The Notorious B.I.G.", "De La Soul"],
+            "typical_tags": ["boom-bap", "sample-based", "lyrical", "east-coast", "storytelling"]
+          },
+          "trap": {
+            "bpm_range": [120, 170],
+            "typical_instruments": ["鼓机(Roland TR-808)", "贝斯合成器(次低频)", "Hi-hat(三连音滚奏)", "合成器(黑暗)", "主唱(Trap Flow)"],
+            "typical_rhythm": "Half-time Kick, Hi-hat三连音快速滚奏, Snare/Clap在第三拍, 切分音贝斯",
+            "emotional_atmosphere": "黑暗, 炫耀, 空虚, 侵略性",
+            "representative_artists": ["T.I.", "Future", "Migos", "Travis Scott", "Playboi Carti"],
+            "typical_tags": ["808-heavy", "triplet-hi-hats", "southern", "dark-bass", "ad-libs"]
+          },
+          "conscious_hiphop": {
+            "bpm_range": [75, 105],
+            "typical_instruments": ["鼓机(经典节奏)", "采样器(Jazz/Soul)", "贝斯(温暖)", "钢琴/键盘", "主唱(有深度的说唱)"],
+            "typical_rhythm": "Boom-bap或Lo-fi节奏, 中速, 注重词的节奏形态",
+            "emotional_atmosphere": "有意识, 批判性, 社会议题, 智性",
+            "representative_artists": ["Kendrick Lamar", "Common", "Talib Kweli", "Mos Def", "J. Cole"],
+            "typical_tags": ["social-commentary", "lyrical-depth", "political", "introspective", "message-driven"]
+          },
+          "gangsta_rap": {
+            "bpm_range": [75, 100],
+            "typical_instruments": ["鼓机(重Kick)", "贝斯(厚重)", "合成器(黑暗)", "采样器(G-Funk风格)", "主唱(强硬Flow)"],
+            "typical_rhythm": "G-Funk风格的慢速节奏, West Coast节奏, 贝斯驱动",
+            "emotional_atmosphere": "街头, 强硬, 暴力美学, 炫耀生活",
+            "representative_artists": ["Dr. Dre", "Snoop Dogg", "2Pac", "The Game", "50 Cent"],
+            "typical_tags": ["west-coast", "g-funk", "street-narrative", "hard-hitting", "laid-back-flow"]
+          },
+          "mumble_rap": {
+            "bpm_range": [110, 160],
+            "typical_instruments": ["鼓机(808驱动)", "合成器(旋律性)", "贝斯合成器", "Auto-Tune人声", "采样器"],
+            "typical_rhythm": "Trap节奏变体, 旋律化Flow, 节奏与歌词密度分离",
+            "emotional_atmosphere": "氛围感, 慵懒, 炫耀, 享乐主义",
+            "representative_artists": ["Future", "Young Thug", "Lil Uzi Vert", "Playboi Carti", "Lil Yachty"],
+            "typical_tags": ["auto-tune-heavy", "melodic-rap", "trap-influence", "ad-lib-heavy", "vibe-focused"]
+          }
+        }
+      },
+
+      "rnb": {
+        "description": "节奏蓝调(R&B) - 融合Soul、Funk、Pop、Hip-hop元素，以流畅人声和平滑节奏为特征",
+        "subgenres": {
+          "contemporary_rnb": {
+            "bpm_range": [60, 110],
+            "typical_instruments": ["鼓机(节奏编程)", "贝斯(温暖/合成)", "键盘/合成器", "吉他(清音)", "主唱(高技巧转音)"],
+            "typical_rhythm": "4/4拍, Hip-hop影响的节奏, Swing, 切分音, 放松的节拍感",
+            "emotional_atmosphere": "性感, 浪漫, 奢华, 情感表达",
+            "representative_artists": ["Beyoncé", "Usher", "Frank Ocean", "The Weeknd", "SZA"],
+            "typical_tags": ["smooth-vocals", "sensual", "melodic-runs", "modern-production", "emotive"]
+          },
+          "neo_soul": {
+            "bpm_range": [60, 100],
+            "typical_instruments": ["钢琴/键盘(温暖)", "贝斯(有机感)", "鼓(原声或模拟)", "吉他(模拟效果)", "主唱(灵魂感)"],
+            "typical_rhythm": "复古Soul节奏, Swing, 松散编排, 有机的律动",
+            "emotional_atmosphere": "灵魂, 深度, 复古, 真实",
+            "representative_artists": ["Erykah Badu", "D'Angelo", "Lauryn Hill", "Maxwell", "Jill Scott"],
+            "typical_tags": ["soulful", "organic", "retro-vibe", "improvisational", "earthy"]
+          },
+          "funk": {
+            "bpm_range": [90, 130],
+            "typical_instruments": ["电贝斯(Slap/Pop)", "电吉他(切分扫弦)", "鼓组(紧凑)", "铜管组(切分)", "键盘(Clavinet)"],
+            "typical_rhythm": "16分音符切分, 强拍Accent在1和3, Ghost notes, 贝斯与鼓紧密互动",
+            "emotional_atmosphere": "律动, 欢快, 放荡不羁, 舞蹈性",
+            "representative_artists": ["James Brown", "Parliament-Funkadelic", "Earth Wind & Fire", "Prince", "Sly & The Family Stone"],
+            "typical_tags": ["groove-heavy", "slap-bass", "syncopated", "danceable", "horn-section"]
+          }
+        }
+      },
+
+      "folk": {
+        "description": "民谣音乐 - 以声学乐器、叙事传统、文化传承为根基",
+        "subgenres": {
+          "indie_folk": {
+            "bpm_range": [70, 120],
+            "typical_instruments": ["木吉他(指弹)", "班卓琴", "曼陀林", "大提琴/小提琴", "主唱(温暖)"],
+            "typical_rhythm": "指弹模式(Fingerpicking Patterns), 摇摆节奏, 混合拍号",
+            "emotional_atmosphere": "独立, 自然, 真诚, 内省",
+            "representative_artists": ["Bon Iver", "The Lumineers", "Mumford & Sons", "Fleet Foxes", "Iron & Wine"],
+            "typical_tags": ["acoustic", "fingerpicking", "harmonies", "nature-themed", "storytelling"]
+          },
+          "neo_folk": {
+            "bpm_range": [60, 120],
+            "typical_instruments": ["木吉他(阴暗)", "钢琴(低沉)", "弦乐(黑暗)", "管乐(民族)", "主唱(低沉/神秘)"],
+            "typical_rhythm": "进行曲节奏, 缓慢鼓点, 仪式感节奏, 重复模式",
+            "emotional_atmosphere": "黑暗, 神秘, 异教感, 传统与现代冲突",
+            "representative_artists": ["Death in June", "Current 93", "Neutral Milk Hotel", "The Mountain Goats"],
+            "typical_tags": ["dark-folk", "avant-garde", "poetic-lyrics", "minimalist", "gothic"]
+          },
+          "street_folk": {
+            "bpm_range": [80, 140],
+            "typical_instruments": ["木吉他(扫弦)", "口琴", "手鼓", "主唱(叙事)", "有时: 小提琴"],
+            "typical_rhythm": "扫弦节奏, 简单的4/4拍, 强调叙事节奏",
+            "emotional_atmosphere": "街头感, 真实, 抗议精神, 人的故事",
+            "representative_artists": ["Bob Dylan", "Woody Guthrie", "Joan Baez", "Cat Stevens", "Pete Seeger"],
+            "typical_tags": ["protest", "storytelling", "acoustic", "social-commentary", "poetic"]
+          },
+          "chinese_folk_feng": {
+            "bpm_range": [60, 100],
+            "typical_instruments": ["二胡", "古筝", "竹笛", "琵琶", "木吉他", "人声(自然)"],
+            "typical_rhythm": "散板, 2/4拍, 4/4拍, 戏曲化节奏",
+            "emotional_atmosphere": "乡愁, 田园, 朴实, 民族情感",
+            "representative_artists": ["周云蓬", "张玮玮", "野孩子", "小河", "万晓利"],
+            "typical_tags": ["chinese-folk", "pastoral", "poetic", "acoustic", "cultural-rooted"]
+          }
+        }
+      },
+
+      "jazz": {
+        "description": "爵士乐 - 以即兴、复杂和声、摇摆节奏为特征，是20世纪最重要的音乐形式之一",
+        "subgenres": {
+          "swing": {
+            "bpm_range": [120, 220],
+            "typical_instruments": ["萨克斯管", "小号", "长号", "钢琴", "贝斯(原声)", "鼓组(刷子)", "单簧管"],
+            "typical_rhythm": "Swing八分音符, 4/4拍, 节奏部的摇摆感, 2-2-4底鼓模式",
+            "emotional_atmosphere": "欢快, 舞动, 优雅, 社交",
+            "representative_artists": ["Duke Ellington", "Count Basie", "Benny Goodman", "Glenn Miller", "Artie Shaw"],
+            "typical_tags": ["swing-rhythm", "big-band", "danceable", "horn-section", "uptempo"]
+          },
+          "bebop": {
+            "bpm_range": [200, 350],
+            "typical_instruments": ["萨克斯管(高音/中音)", "小号", "钢琴(复杂和声)", "贝斯(行走)", "鼓组(交互式)"],
+            "typical_rhythm": "快速, 复杂和声行进, 不规则乐句, 即兴solo密集",
+            "emotional_atmosphere": "智性, 急促, 先锋, 地下",
+            "representative_artists": ["Charlie Parker", "Dizzy Gillespie", "Thelonious Monk", "Bud Powell", "Max Roach"],
+            "typical_tags": ["fast-tempo", "complex-harmony", "improvisation", "intellectual", "horn-driven"]
+          },
+          "cool_jazz": {
+            "bpm_range": [80, 160],
+            "typical_instruments": ["萨克斯管(柔音)", "小号(弱音器)", "钢琴(轻触)", "贝斯(温暖)", "鼓组(刷子/轻击)"],
+            "typical_rhythm": "放松的Swing, 中慢速, 平滑的节奏流动, 精致的编曲",
+            "emotional_atmosphere": "放松, 冷静, 精致, 西海岸感",
+            "representative_artists": ["Miles Davis", "Chet Baker", "Dave Brubeck", "Stan Getz", "Bill Evans"],
+            "typical_tags": ["relaxed", "smooth", "west-coast", "lyrical", "textured"]
+          },
+          "jazz_fusion": {
+            "bpm_range": [80, 180],
+            "typical_instruments": ["电吉他(效果器)", "电贝斯", "键盘合成器", "萨克斯(电声)", "鼓组(摇滚感觉)"],
+            "typical_rhythm": "Rock/Funk节奏感, 混合拍号, 复杂节奏模式, 电子化音色",
+            "emotional_atmosphere": "实验, 力量感, 跨界, 现代",
+            "representative_artists": ["Weather Report", "John McLaughlin", "Chick Corea", "Herbie Hancock", "Return to Forever"],
+            "typical_tags": ["electric", "experimental", "genre-blending", "virtuosic", "1970s"]
+          }
+        }
+      },
+
+      "classical": {
+        "description": "古典音乐 - 西方艺术音乐传统，从巴洛克到现代，强调形式、结构和和声",
+        "subgenres": {
+          "baroque": {
+            "bpm_range": [60, 160],
+            "typical_instruments": ["羽管键琴", "管风琴", "巴洛克小提琴", "大提琴(无指板)", "木管(古乐器)"],
+            "typical_rhythm": "复调对位, 通奏低音, 舞蹈组曲节奏, 巴洛克式的装饰音",
+            "emotional_atmosphere": "精致, 装饰性, 庄严, 秩序之美",
+            "representative_artists": ["J.S. Bach", "Vivaldi", "Handel", "Corelli", "Scarlatti"],
+            "typical_tags": ["counterpoint", "ornate", "harpsichord", "figured-bass", "polyphonic"]
+          },
+          "classical_period": {
+            "bpm_range": [60, 180],
+            "typical_instruments": ["钢琴(古钢琴)", "木管(双簧管/长笛)", "圆号", "弦乐四重奏", "管弦乐团(中型)"],
+            "typical_rhythm": "主调音乐, 平衡的乐句结构, 奏鸣曲式, 清晰的节奏划分",
+            "emotional_atmosphere": "优雅, 平衡, 理性, 明快",
+            "representative_artists": ["Mozart", "Haydn", "早期Beethoven", "Schubert", "Gluck"],
+            "typical_tags": ["sonata-form", "balanced-phrasing", "elegant", "classical-orchestra", "homophonic"]
+          },
+          "romantic": {
+            "bpm_range": [30, 200],
+            "typical_instruments": ["管弦乐(大型)", "钢琴(情感化)", "弦乐组(宏大)", "铜管(辉煌)", "竖琴"],
+            "typical_rhythm": "自由节奏(Rubato), 变化拍号, 情感驱动的速度变化, 大幅动态对比",
+            "emotional_atmosphere": "激情, 悲剧性, 宏大, 个人情感表达",
+            "representative_artists": ["Chopin", "Liszt", "Tchaikovsky", "Wagner", "Rachmaninoff"],
+            "typical_tags": ["rubato", "passionate", "large-orchestra", "virtuosic-piano", "programmatic"]
+          },
+          "modern_classical": {
+            "bpm_range": [20, 200],
+            "typical_instruments": ["任何乐器(含非常规)", "电子设备", "打击乐(大量)", "预制钢琴", "人声(新技)"],
+            "typical_rhythm": "无调性, 非传统拍号, 序列主义, 偶然音乐, 噪音/无声",
+            "emotional_atmosphere": "实验, 不协和, 解构, 哲学性",
+            "representative_artists": ["Stravinsky", "Schoenberg", "John Cage", "Steve Reich", "Philip Glass"],
+            "typical_tags": ["atonal", "minimalist", "dissonant", "experimental", "20th-century"]
+          }
+        }
+      },
+
+      "world_music": {
+        "description": "世界音乐 - 各地区传统文化音乐及现代融合",
+        "subgenres": {
+          "flamenco": {
+            "bpm_range": [60, 180],
+            "typical_instruments": ["弗拉门戈吉他", "卡洪(木箱鼓)", "响板", "帕尔玛(击掌)", "人声(Cante Jondo)"],
+            "typical_rhythm": "Compás节奏模式(12拍循环),  3/4拍, 6/8拍, Bulerías/Alegrías等特殊节奏",
+            "emotional_atmosphere": "激情, 哀伤, 骄傲, 戏剧性",
+            "representative_artists": ["Paco de Lucía", "Camarón de la Isla", "Vicente Amigo", "Tomatito", "Niña Pastori"],
+            "typical_tags": ["passionate", "guitar-heavy", "compas-rhythm", "dramatic", "andalusian"]
+          },
+          "tango": {
+            "bpm_range": [60, 140],
+            "typical_instruments": ["班多钮手风琴", "小提琴", "钢琴", "吉他", "贝斯", "人声(戏剧性)"],
+            "typical_rhythm": "2/4拍或4/4拍, 停-走的节奏模式, 切分音, Habanera节奏",
+            "emotional_atmosphere": "悲伤, 性感, 怀旧, 戏剧性",
+            "representative_artists": ["Astor Piazzolla", "Carlos Gardel", "Ástor Piazzolla", "Juan D'Arienzo", "Osvaldo Pugliese"],
+            "typical_tags": ["melancholic", "bandoneon", "argentinian", "dramatic", "sensual"]
+          },
+          "reggae": {
+            "bpm_range": [60, 100],
+            "typical_instruments": ["电吉他(Skank节奏)", "贝斯(厚重/旋律)", "鼓组(One Drop)", "键盘(风琴)", "人声(拉格)"],
+            "typical_rhythm": "One Drop节奏(底鼓在第三拍), Skank off-beat吉他, 摇摆的贝斯旋律",
+            "emotional_atmosphere": "放松, 反抗, 精神性, 热带感",
+            "representative_artists": ["Bob Marley", "Peter Tosh", "Jimmy Cliff", "Toots and the Maytals", "Lee \"Scratch\" Perry"],
+            "typical_tags": ["one-drop", "rasta", "laid-back", "bass-heavy", "conscious"]
+          },
+          "samba": {
+            "bpm_range": [140, 200],
+            "typical_instruments": ["苏尔多鼓", "坦博林", "库卡鼓", "锣鼓", "吉他", "卡瓦基纽(小吉他)"],
+            "typical_rhythm": "2/4拍, 密集16分音符, 打击乐层层叠加, 切分音强烈",
+            "emotional_atmosphere": "欢乐, 节庆, 舞动, 卡里奥克(里约)精神",
+            "representative_artists": ["Cartola", "Zeca Pagodinho", "Beth Carvalho", "Martinho da Vila", "Dona Ivone Lara"],
+            "typical_tags": ["carnival", "percussion-heavy", "brazilian", "festive", "danceable"]
+          },
+          "bossa_nova": {
+            "bpm_range": [60, 120],
+            "typical_instruments": ["木吉他(指弹)", "钢琴(轻触)", "贝斯(流动)", "鼓组(刷子)", "人声(低语感)"],
+            "typical_rhythm": "Samba节奏的简化版, Clave模式, 吉他切分音, 放松的Swing",
+            "emotional_atmosphere": "浪漫, 悠闲, 优雅, 海滩感",
+            "representative_artists": ["Antônio Carlos Jobim", "João Gilberto", "Astrud Gilberto", "Vinicius de Moraes", "Stan Getz(萨克斯)"],
+            "typical_tags": ["smooth", "romantic", "brazilian-jazz", "soft-vocals", "beach-vibe"]
+          },
+          "celtic": {
+            "bpm_range": [60, 160],
+            "typical_instruments": ["小提琴/大提琴", "锡哨/爱尔兰长笛", "风笛(Uilleann Pipes)", "竖琴", "手风琴", "宝思兰鼓(手鼓)"],
+            "typical_rhythm": "Jig(6/8拍), Reel(4/4拍), Hornpipe(2/4拍), 节奏快而活泼",
+            "emotional_atmosphere": "怀旧, 欢乐, 史诗, 灵性",
+            "representative_artists": ["The Chieftains", "Enya", "Clannad", "Loreena McKennitt", "The Dubliners"],
+            "typical_tags": ["fiddles", "uilleann-pipes", "folk-dance", "irish", "melancholic-yet-uplifting"]
+          },
+          "indian_classical": {
+            "bpm_range": [30, 200],
+            "typical_instruments": ["西塔琴(Sitar)", "塔布拉鼓(Tabla)", "坦普拉琴(Tanpura)", "笛子(Bansuri)", "萨罗达琴(Sarod)", "人声(Khyal)"],
+            "typical_rhythm": "Tala(节奏循环), Raga(旋律框架), Alap(慢速引入), Jor/Jhala(加速)",
+            "emotional_atmosphere": "冥想, 精神性, 复杂, 有机",
+            "representative_artists": ["Ravi Shankar", "Ali Akbar Khan", "Zakir Hussain", "Hariprasad Chaurasia", "Nikhil Banerjee"],
+            "typical_tags": ["raga-based", "improvisational", "meditative", "tala-cycle", "spiritual"]
+          },
+          "african_traditional": {
+            "bpm_range": [80, 200],
+            "typical_instruments": ["Djembe鼓", "Doundoun鼓", "Kora(科拉琴)", "Balafon(木琴)", "Mbira(拇指琴)", "Talking Drum", "Kalimba"],
+            "typical_rhythm": "多节奏(Polyrhythm), 复节奏层叠, Call-and-Response, 律动驱动的长循环模式",
+            "emotional_atmosphere": "部落, 庆祝, 土地连接, 仪式感",
+            "representative_artists": ["Youssou N'Dour", "Fela Kuti(Afrobeat)", "Salif Keita", "Miriam Makeba", "Angelique Kidjo"],
+            "typical_tags": ["polyrhythmic", "percussive", "call-and-response", "tribal-energy", "dance"]
+          },
+          "latin_pop": {
+            "bpm_range": [90, 140],
+            "typical_instruments": ["木吉他(拉丁节奏)", "钢琴", "康茄鼓/Conga", "邦戈鼓/Bongo", "小号/铜管", "沙锤"],
+            "typical_rhythm": "Clave模式, Salsa节奏, 切分音, Montuno钢琴模式",
+            "emotional_atmosphere": "热情, 舞蹈, 浪漫, 阳光",
+            "representative_artists": ["Shakira", "Ricky Martin", "Luis Fonsi", "Bad Bunny(雷击顿)", "Marc Anthony"],
+            "typical_tags": ["latin-rhythm", "danceable", "passionate", "spanish-vocals", "clave"]
+          }
+        }
+      },
+
+      "chinese_styles": {
+        "description": "中国风格音乐 - 包含传统与现代融合",
+        "subgenres": {
+          "ancient_style_guofeng": {
+            "bpm_range": [60, 120],
+            "typical_instruments": ["古筝", "琵琶", "竹笛/箫", "二胡", "古琴", "中国鼓", "编钟"],
+            "typical_rhythm": "散板, 2/4拍, 4/4拍, 戏曲板式(慢板/快板)",
+            "emotional_atmosphere": "诗意, 古风, 江湖, 唯美",
+            "representative_artists": ["许嵩", "河图", "银临", "周杰伦(中国风曲目)", "林志炫"],
+            "typical_tags": ["chinese-traditional", "poetic-lyrics", "pentatonic", "elegant", "historical"]
+          },
+          "chinese_folk_ensemble": {
+            "bpm_range": [40, 160],
+            "typical_instruments": ["二胡", "琵琶", "笛子", "扬琴", "古筝", "唢呐", "大鼓", "笙"],
+            "typical_rhythm": "板式结构(散-慢-中-快), 戏曲节奏, 民间舞曲节奏",
+            "emotional_atmosphere": "民间, 节庆, 乡土, 民族自豪",
+            "representative_artists": ["阿炳(华彦钧)", "刘天华", "闵惠芬", "吴蛮", "中央民族乐团"],
+            "typical_tags": ["chinese-ensemble", "民俗", "pentatonic-scale", "folk-melody", "cultural-heritage"]
+          },
+          "guochao": {
+            "bpm_range": [80, 150],
+            "typical_instruments": ["传统民乐音色+合成器", "电吉他", "鼓机", "电子贝斯", "民乐采样融合"],
+            "typical_rhythm": "Trap/Hip-hop节奏 + 民乐旋律, 4/4拍, 电子节奏与民乐混合",
+            "emotional_atmosphere": "国潮, 年轻, 文化自信, 时尚",
+            "representative_artists": ["陈柯宇", "霍尊", "GAI周延", "林欣", "刘柏辛"],
+            "typical_tags": ["chinese-trap", "cultural-fusion", "trendy", "young-energy", "patriotic-vibe"]
+          },
+          "chinese_bel_canto": {
+            "bpm_range": [50, 140],
+            "typical_instruments": ["钢琴(伴奏)", "管弦乐", "竹笛/箫(点缀)", "中国打击乐"],
+            "typical_rhythm": "自由节奏, 戏曲板式, 民族的歌化节奏",
+            "emotional_atmosphere": "大气, 民族自豪, 抒情, 艺术性",
+            "representative_artists": ["宋祖英", "彭丽嫒", "阎维文", "张也", "廖昌永"],
+            "typical_tags": ["chinese-vocal", "patriotic", "folk-inspired", "grand", "operatic"]
+          }
+        }
+      },
+
+      "japanese_styles": {
+        "description": "日本风格音乐",
+        "subgenres": {
+          "jpop": {
+            "bpm_range": [110, 170],
+            "typical_instruments": ["电吉他(清音)", "合成器(明亮)", "鼓机", "贝斯(跳跃)", "主唱(可爱/清亮)"],
+            "typical_rhythm": "4/4拍, 轻快, 16分音符节奏, 强律动, J-Pop特有的旋律跳跃",
+            "emotional_atmosphere": "朝气, 可爱, 元气, 青春",
+            "representative_artists": ["宇多田光", "嵐", "YOASOBI", "米津玄師", "Ado"],
+            "typical_tags": ["japanese-production", "catchy-melody", "upbeat", "city-pop-influence", "idol-vibe"]
+          },
+          "jrock": {
+            "bpm_range": [100, 200],
+            "typical_instruments": ["电吉他(失真/清音交替)", "贝斯(旋律性)", "鼓组(复杂)", "合成器", "主唱(日式发音)"],
+            "typical_rhythm": "4/4拍为主, 混合拍号, 动感节奏, 快速琶音",
+            "emotional_atmosphere": "热血, 动漫感, 激昂, 中二",
+            "representative_artists": ["ONE OK ROCK", "L'Arc~en~Ciel", "RADWIMPS", "King Gnu", "Asian Kung-Fu Generation"],
+            "typical_tags": ["japanese-rock", "anime-theme", "energetic", "emotional", "anthemic"]
+          },
+          "jazz_hiphop_japan": {
+            "bpm_range": [75, 100],
+            "typical_instruments": ["MPC/鼓机(采样)", "钢琴/Jazz键盘", "木吉他(采样)", "贝斯(温暖)", "主唱(柔软的Rap)"],
+            "typical_rhythm": "Lo-fi Hip-hop节奏, Jazz采样, Swing, 切分音",
+            "emotional_atmosphere": "城市感, 怀旧, 悠闲, 爵士氛围",
+            "representative_artists": ["Nujabes", "菅野よう子", "m-flo", "Shing02", "DJ Krush"],
+            "typical_tags": ["japanese-hiphop", "jazz-samples", "chill", "urban", "instrumental"]
+          },
+          "wafuu_wagaku": {
+            "bpm_range": [40, 120],
+            "typical_instruments": ["尺八", "三味线", "和太鼓", "琴", "琵琶", "古筝(日式)"],
+            "typical_rhythm": "日本传统节奏(小间/大间), 拍子(偶数拍), 自由的Rubato",
+            "emotional_atmosphere": "和风, 寂寥(Wabi-sabi), 幽玄, 古典",
+            "representative_artists": ["吉田潔", "Rin'", "坂本龍一(Oriental)", "鬼太鼓座", "東儀秀樹"],
+            "typical_tags": ["japanese-traditional", "wabi-sabi", "zen", "shakuhachi", "koto"]
+          }
+        }
+      },
+
+      "korean_styles": {
+        "description": "韩国风格音乐",
+        "subgenres": {
+          "kpop": {
+            "bpm_range": [90, 170],
+            "typical_instruments": ["合成器(华丽)", "鼓机(编程)", "贝斯合成器", "电吉他(点缀)", "人声(强编舞感)"],
+            "typical_rhythm": "4/4拍, Trap/EDM/House混合, 强拍强调, 舞曲结构, 节奏变化多的编曲",
+            "emotional_atmosphere": "潮流, 精致, 表演性, 偶像感",
+            "representative_artists": ["BTS", "BLACKPINK", "TWICE", "EXO", "NewJeans"],
+            "typical_tags": ["korean-pop", "dance-choreography", "polished-production", "fashion-forward", "group-sound"]
+          },
+          "korean_indie": {
+            "bpm_range": [70, 130],
+            "typical_instruments": ["木吉他", "钢琴", "贝斯(温暖)", "鼓组(细腻)", "主唱(感性)"],
+            "typical_rhythm": "4/4拍, 柔和的节奏, 情感驱动的动态",
+            "emotional_atmosphere": "感性, 城市孤独感, 文艺, 细腻",
+            "representative_artists": ["IU(独立风格)", "乐童音乐家", "郑容和(Band)", "Jannabi", "HYUKOH"],
+            "typical_tags": ["korean-indie", "emotional", "melodic", "sensitive", "acoustic-influence"]
+          },
+          "korean_ballad": {
+            "bpm_range": [55, 85],
+            "typical_instruments": ["钢琴(铺垫)", "弦乐(管弦)", "吉他(清音)", "鼓组(轻柔)", "主唱(情感爆发)"],
+            "typical_rhythm": "4/4拍, 缓慢, 渐强结构, 情感递进",
+            "emotional_atmosphere": "哀伤, 爱情, 催泪, 宏大情感",
+            "representative_artists": ["朴孝信", "成始璄", "李昇基", "Gummy", "Davichi"],
+            "typical_tags": ["korean-ballad", "emotional-vocals", "orchestral", "melodramatic", "heartfelt"]
+          }
+        }
+      },
+
+      "experimental_alternative": {
+        "description": "实验/另类音乐 - 突破框架的音乐探索",
+        "subgenres": {
+          "noise": {
+            "bpm_range": [0, 300],
+            "typical_instruments": ["电吉他(反馈/极端失真)", "合成器(噪音)", "效果器(大量)", "打击乐(非音乐性)", "磁带/电子噪音"],
+            "typical_rhythm": "无固定节奏, 噪音墙, 随机/偶然, 非音乐性结构",
+            "emotional_atmosphere": "冲击, 不舒适, 解构, 极端",
+            "representative_artists": ["Merzbow", "Throbbing Gristle", "Suicide", "The Jesus and Mary Chain(早期)", "Wolf Eyes"],
+            "typical_tags": ["harsh", "dissonant", "wall-of-sound", "transgressive", "abstract"]
+          },
+          "avant_garde": {
+            "bpm_range": [30, 200],
+            "typical_instruments": ["任何乐器", "电子设备", "找到的声音(Found Sound)", "预制乐器", "沉默"],
+            "typical_rhythm": "无固定, 不规则拍号, 偶然音乐, 即兴, 不确定性",
+            "emotional_atmosphere": "挑衅, 哲学, 实验, 解构",
+            "representative_artists": ["John Cage", "Karlheinz Stockhausen", "Frank Zappa", "Brian Eno", "Sun Ra"],
+            "typical_tags": ["experimental", "unconventional", "conceptual", "genre-defying", "challenging"]
+          },
+          "vaporwave": {
+            "bpm_range": [60, 100],
+            "typical_instruments": ["采样器(80s/90s音乐)", "合成器(复古)", "鼓机(LinnDrum等)", "效果器(磁带/Chorus)", "数字处理器"],
+            "typical_rhythm": "放缓的Funk节奏, Loop重复, 切碎/扭曲的节奏, 低保真制作",
+            "emotional_atmosphere": "怀旧, 讽刺, 超现实, 虚拟感",
+            "representative_artists": ["Macintosh Plus", "2814", "Blank Banshee", "Saint Pepsi", "Nmesh"],
+            "typical_tags": ["retro-wave", "sample-heavy", "slowed-down", "digital-art", "nostalgic"]
+          }
+        }
+      }
+    }
+  },
+
+  "lyric_writing_techniques": {
+    "description": "歌词创作技巧大全",
+    "rhyme_schemes": {
+      "aabb": {
+        "description": "双行押韵(对联式押韵) - 每两行押一个韵",
+        "pattern": "行1-2押A韵, 行3-4押B韵, 以此类推",
+        "example": "月光洒在窗台(A)\n心事飘向大海(A)\n风带走了一片云(B)\n留下孤独的灵魂(B)",
+        "effect": "节奏感强, 适合流行/儿歌, 容易记忆但可能单调",
+        "usage_tips": "常用于副歌或少儿歌曲, 适合朗朗上口的旋律"
+      },
+      "abab": {
+        "description": "交错韵(交叉韵) - 第一行和第三行押韵, 第二行和第四行押韵",
+        "pattern": "行1押A韵, 行2押B韵, 行3押A韵, 行4押B韵",
+        "example": "如果世界没有光(A)\n我仍会向前走(B)\n用声音丈量远方(A)\n等晨曦在尽头(B)",
+        "effect": "更成熟的韵律感, 增加变化性, 适合叙事",
+        "usage_tips": "经典诗歌格式, 适合叙事性歌词"
+      },
+      "abcb": {
+        "description": "民谣韵(ballad rhyme) - 第二行和第四行押韵, 第一行和第三行自由",
+        "pattern": "行1自由(A), 行2押B韵, 行3自由(C), 行4押B韵",
+        "example": "风从这里经过(A)\n卷起多少故事(B)\n夕阳下影子拉长(C)\n就像昨天的你我(B)",
+        "effect": "最自然的民谣韵律, 叙事流畅",
+        "usage_tips": "Ballad/Country/Folk的经典押韵方式"
+      },
+      "internal_rhyme": {
+        "description": "内韵 - 在同一行内部出现押韵",
+        "pattern": "行内某词与行尾或行内其他词押韵",
+        "example": "我在**深夜**的**街**, 看着**月**的光**洁**",
+        "effect": "增加节奏密度和文学性, 技巧性强",
+        "usage_tips": "Rap歌词中大量使用, 也适合艺术性高的流行歌词"
+      },
+      "near_rhyme_slant_rhyme": {
+        "description": "近韵/斜韵 - 近似但不完全相同的韵脚",
+        "pattern": "元音不同但辅音相似(如mind/find 或 风/梦)",
+        "example": "中文: 风(feng)和梦(meng), 心(xin)和情(qing)\n英文: mind/find, prove/love",
+        "effect": "增加押韵的灵活性, 避免刻意感",
+        "usage_tips": "当完全押韵太刻意时使用, 现代歌词常用"
+      },
+      "enclosed_rhyme_abba": {
+        "description": "抱韵 - 第一行和第四行押韵, 第二行和第三行押韵",
+        "pattern": "行1押A韵, 行2押B韵, 行3押B韵, 行4押A韵",
+        "example": "城市在夜幕中沦陷(A)\n霓虹灯熄灭之前(B)\n我写下最后一封信(B)\n时间已定格在昨天(A)",
+        "effect": "结构精密, 有收束感, 适合情感强烈的段落",
+        "usage_tips": "适合桥段(Bridge)或情感转折部分"
+      },
+      "monorhyme_aaaa": {
+        "description": "同韵 - 所有行押同一个韵",
+        "pattern": "AAAA... 所有行同一韵",
+        "example": "今夜星光太沉重(A)\n我的心事在翻涌(A)\n回忆像潮水汹涌(A)\n淹没在你的面容(A)",
+        "effect": "极强的节奏感, 催眠效果, 但易显单调",
+        "usage_tips": "Rap多段连续押韵, 或营造执着感/仪式感"
+      }
+    },
+
+    "rhetorical_devices": {
+      "metaphor": {
+        "description": "比喻 - 将A物比作B物, 明喻(like/as)和暗喻(is)",
+        "example": "你的笑容像阳光(明喻) / 你是我的整个世界(暗喻)",
+        "effect": "增强画面感和感染力",
+        "chinese_examples": "问君能有几多愁, 恰似一江春水向东流"
+      },
+      "personification": {
+        "description": "拟人 - 将非人事物赋予人的特征",
+        "example": "风在耳边低语 / 时光偷走了青春",
+        "effect": "增加生动性和情感连接"
+      },
+      "parallelism": {
+        "description": "排比 - 用相似结构的句子重复",
+        "example": "我可以等在这路口/我可以等在黄昏后/我可以等在你不会出现的时候",
+        "effect": "增强气势和节奏感, 加深记忆点"
+      },
+      "antithesis": {
+        "description": "对仗 - 字数相同、结构相似的对应",
+        "example": "海上生明月, 天涯共此时 / 你在我左边, 世界在右边",
+        "effect": "工整美, 平衡感, 中国古典诗歌核心技法"
+      },
+      "fu_bi_xing": {
+        "description": "赋比兴 - 中国诗歌三大传统手法",
+        "fu_vs_narration": {
+          "description": "赋(赋陈) - 直接陈述、铺陈叙事",
+          "example": "关关雎鸠, 在河之洲(直接描写所见)"
+        },
+        "bi_vs_ metaphor": {
+          "description": "比(比喻) - 以此物比彼物",
+          "example": "手如柔荑, 肤如凝脂(比) / 问君能有几多愁, 恰似一江春水向东流"
+        },
+        "xing_vs_ evocation": {
+          "description": "兴(起兴) - 先咏他物以引起所咏之词",
+          "example": "蒹葭苍苍, 白露为霜 → 所谓伊人, 在水一方(先写景起兴, 后写情)"
+        }
+      },
+      "synesthesia": {
+        "description": "通感 - 将不同感官混合描述",
+        "example": "我听不到的颜色 / 温暖的声音 / 冰冷的光线",
+        "effect": "增加诗意和先锋感"
+      },
+      "allusion_yongdian": {
+        "description": "用典 - 引用历史故事/经典作品",
+        "example": "庄生晓梦迷蝴蝶(李商隐用庄周梦蝶典)\n明月几时有, 把酒问青天(苏轼用李白典)",
+        "effect": "增加文化厚度和意境深度"
+      },
+      "pun_shuangguan": {
+        "description": "双关 - 一词多义, 一语双关",
+        "example": "你是我的风景(风景=景色/心里的人和事)\n不能说的秘密(秘密=保密/内心)",
+        "effect": "巧妙性, 增加解读层次"
+      }
+    },
+
+    "narrative_structures": {
+      "linear_narrative": {
+        "description": "线性叙事 - 按时间顺序讲述故事",
+        "structure": "开始→发展→高潮→结局",
+        "example_songs": ["Taylor Swift - Love Story", "Bob Dylan - Tangled Up in Blue"],
+        "best_for": "叙事性民谣, 故事型流行歌"
+      },
+      "reverse_narrative": {
+        "description": "倒叙 - 从结果或现在出发, 回忆过去",
+        "structure": "现在→回忆→回到现在并升华",
+        "example_songs": ["黄龄 - 痒", "Adele - Someone Like You"],
+        "best_for": "怀旧, 伤感, 反思型歌词"
+      },
+      "flashback": {
+        "description": "闪回 - 在叙述中插入过去片段",
+        "structure": "主线叙述+穿插的回忆片段",
+        "example_songs": ["Pink Floyd - The Wall", "房东的猫 - 云烟成雨"],
+        "best_for": "意识流, 心理描写"
+      },
+      "imagery_cluster": {
+        "description": "意象群 - 通过一系列意象堆叠营造氛围",
+        "structure": "意象A→意象B→意象C→意象D→情感收束",
+        "example_songs": ["方文山作词的周杰伦歌曲", "Sigur Rós的歌词"],
+        "best_for": "氛围音乐, 中国风, 梦幻流行"
+      },
+      "scene_dialogue": {
+        "description": "情境/对话体 - 通过场景和对话推进",
+        "structure": "场景设定→人物对话→情感揭示",
+        "example_songs": ["陈奕迅 - 好久不见", "The Beatles - Eleanor Rigby"],
+        "best_for": "戏剧性强的歌曲, 音乐剧风格"
+      },
+      "stream_of_consciousness": {
+        "description": "意识流 - 模仿无意识思维的流动",
+        "structure": "自由联想, 跳跃, 非线性",
+        "example_songs": ["Bob Dylan - Like a Rolling Stone", "Radiohead - Paranoid Android"],
+        "best_for": "实验性, 另类摇滚, 艺术流行"
+      },
+      "Chinese_poetic_structure": {
+        "description": "中国诗学结构 - 起承转合",
+        "structure": "起(引入) → 承(发展) → 转(转折) → 合(收束)",
+        "example": "床前明月光(起)→疑是地上霜(承)→举头望明月(转)→低头思故乡(合)",
+        "best_for": "古风, 中国风歌词, 传统叙事"
+      }
+    },
+
+    "modern_poetry_techniques": {
+      "defamiliarization": {
+        "description": "陌生化 - 用不寻常的表达方式描述熟悉的事物",
+        "example": "把寂寞切成碎片 / 时间的皮肤在剥落",
+        "effect": "制造新鲜感和震撼感"
+      },
+      "collage": {
+        "description": "拼贴 - 将不同的文本片段、意象拼合",
+        "example": "破碎的词语被重组, 像城市的霓虹灯",
+        "effect": "后现代感, 碎片化美学"
+      },
+      "minimalism": {
+        "description": "极简 - 用最少的词表达最多的含义",
+        "example": "雨。伞。你不在。",
+        "effect": "留白, 给想象空间"
+      },
+      "concrete_abstraction": {
+        "description": "具象化抽象 - 把抽象概念用具体物象呈现",
+        "example": "孤独是一把旧椅子(把孤独具象化)\n我在收集整个夏天(把抽象的时间具象化)"
+      }
+    },
+
+    "chinese_phonetic_techniques": {
+      "shuangsheng": {
+        "description": "双声 - 两个字声母相同",
+        "example": "仿佛(fang fu), 流连(liu lian), 玲珑(ling long)",
+        "effect": "增加音乐性和流畅感"
+      },
+      "dieyun": {
+        "description": "叠韵 - 两个字韵母相同",
+        "example": "窈窕(yao tiao), 朦胧(meng long), 彷徨(pang huang)",
+        "effect": "增强韵律美"
+      },
+      "reduplication_diezi": {
+        "description": "叠字 - 重复同一字",
+        "example": "寻寻觅觅, 冷冷清清(李清照) / 慢慢/渐渐/悄悄/声声慢",
+        "effect": "增强节奏感和抒情性"
+      },
+      "four_character_rhythm": {
+        "description": "四字节奏 - 中文特有的四字格律",
+        "example": "诗和远方/山高水长/春花秋月/沧海桑田",
+        "effect": "成语式的凝练表达, 适合古风歌词"
+      }
+    }
+  },
+
+  "song_structure_templates": {
+    "description": "歌曲结构模板, 按流派和时长分类",
+    "standard_components": {
+      "intro": "前奏 - 建立氛围和调性, 通常2-8小节, 无唱词",
+      "verse": "主歌 - 叙事部分, 推动故事, 旋律相对平缓, 通常8-16小节",
+      "pre_chorus": "导歌 - 连接主歌与副歌, 增加紧张感, 通常4-8小节",
+      "chorus": "副歌 - 核心记忆点, 旋律高潮, 重复出现, 通常8小节",
+      "bridge": "桥段 - 结构转折, 提供新视角/情感变化, 通常4-8小节",
+      "outro": "尾奏 - 收尾, fade-out或高潮渐弱",
+      "instrumental_break": "间奏 - 器乐独奏部分, 通常在第二次副歌后",
+      "hook": "Hook句 - 最抓耳的短句/旋律"
+    },
+
+    "pop_structure": {
+      "description": "流行音乐标准结构 - 最常见的现代歌曲格式",
+      "standard": "Intro → Verse1 → Pre-Chorus → Chorus → Verse2 → Pre-Chorus → Chorus → Bridge → Chorus/Outro",
+      "variation_a": "Intro → Chorus → Verse1 → Chorus → Bridge → Chorus(×2) → Outro (副歌先行)",
+      "variation_b": "Verse1 → Verse2 → Chorus → Verse3 → Chorus → Bridge → Chorus (慢热型)",
+      "typical_duration": "3:00 - 3:30",
+      "timeline_optimization": [
+        {"position": "0:00-0:15", "section": "Intro", "content": "建立氛围, 4-8小节, 标志性riff/melody hook"},
+        {"position": "0:15-0:45", "section": "Verse 1", "content": "引入叙事, 简约编曲, 让听众注意歌词"},
+        {"position": "0:45-1:00", "section": "Pre-Chorus", "content": "增加紧张感, 声部叠加, 鼓点加强"},
+        {"position": "1:00-1:20", "section": "Chorus", "content": "最高的能量投入, 完整编曲, 记忆点"},
+        {"position": "1:20-1:50", "section": "Verse 2", "content": "增加新的旋律元素/和声, 推进故事"},
+        {"position": "1:50-2:05", "section": "Pre-Chorus", "content": "比第一次更强烈的build-up"},
+        {"position": "2:05-2:25", "section": "Chorus", "content": "重复但可增加即兴/和声变化"},
+        {"position": "2:25-2:55", "section": "Bridge", "content": "情感转折/音乐低谷, 新的和弦进行"},
+        {"position": "2:55-3:20", "section": "Final Chorus", "content": "最强大的版本, 配器最丰富, 即兴发挥"},
+        {"position": "3:20-3:30", "section": "Outro", "content": "渐弱或突然结束, 情感残留"}
+      ]
+    },
+
+    "rock_structure": {
+      "description": "摇滚结构 - 更自由的编排, 强调器乐互动和爆发",
+      "standard": "Intro → Verse → Chorus → Verse → Chorus → Guitar/Solo → Chorus(×2) → Outro",
+      "typical_duration": "3:30 - 5:00",
+      "features": ["吉他solo作为高潮点", "动态对比(安静主歌/暴力副歌)", "长间奏/即兴段", "颤音fade-out尾奏"],
+      "timeline_optimization": [
+        {"position": "0:00-0:10", "section": "Intro", "content": "标志性Riff, 立即建立态度"},
+        {"position": "0:10-0:40", "section": "Verse 1", "content": "贝斯和鼓保持节奏, 吉他节奏扫弦"},
+        {"position": "0:40-1:10", "section": "Chorus", "content": "全乐队爆发, 失真吉他, 强力和弦"},
+        {"position": "1:10-1:40", "section": "Verse 2", "content": "可降回安静, 动态对比"},
+        {"position": "1:40-2:10", "section": "Chorus", "content": "更强的能量, vocal即兴"},
+        {"position": "2:10-3:00", "section": "Guitar Solo", "content": "吉他手展示, 技术性高潮"},
+        {"position": "3:00-3:40", "section": "Bridge/Final Chorus", "content": "节奏变化或氛围转变"},
+        {"position": "3:40-4:00+", "section": "Outro", "content": "渐强或零落结束"}
+      ]
+    },
+
+    "electronic_structure": {
+      "description": "电子音乐结构 - Build-up/Drop循环, 以舞池效果为目标",
+      "standard": "Intro (降能量) → Build-up (升压) → Drop (爆发) → Breakdown (降) → Build-up → Drop (变化) → Outro",
+      "typical_duration": "3:00 - 6:00",
+      "features": ["长Build-up(16-32小节)", "Drop段的强烈释放", "Breakdown段的氛围化", "渐变而非即刻变化"],
+      "timeline_optimization": [
+        {"position": "0:00-0:30", "section": "Intro", "content": "建立节奏和氛围, 渐进加入元素"},
+        {"position": "0:30-1:00", "section": "Build-up 1", "content": "增加打击乐密度, 提升节奏能量"},
+        {"position": "1:00-1:30", "section": "Drop 1", "content": "重低音和主旋律爆发, 舞池高潮"},
+        {"position": "1:30-2:15", "section": "Breakdown", "content": "去掉鼓点, 氛围Pad, 情绪沉淀"},
+        {"position": "2:15-2:45", "section": "Build-up 2", "content": "更强的Riser效果, 预期爆发"},
+        {"position": "2:45-3:30", "section": "Drop 2", "content": "变化版本, 更激烈或更旋律化"},
+        {"position": "3:30-4:00", "section": "Outro/Switch", "content": "渐出或突然结束转入下一曲"}
+      ]
+    },
+
+    "folk_narrative_structure": {
+      "description": "民谣叙事结构 - 以讲故事为核心, 结构自由",
+      "standard": "Intro → Verse 1 → Chorus → Verse 2 → Chorus → Instrumental → Verse 3 → Chorus → Outro",
+      "typical_duration": "3:00 - 5:00",
+      "features": ["多段主歌推进叙事(有时4-5段)", "副歌通常简短", "手指指弹pattern在整曲持续", "可能有口语讲述段落"],
+      "timeline_optimization": [
+        {"position": "0:00-0:10", "section": "Intro", "content": "简洁的吉他指弹或口琴"},
+        {"position": "0:10-0:50", "section": "Verse 1", "content": "引出故事背景, 简约伴奏"},
+        {"position": "0:50-1:10", "section": "Chorus", "content": "简单易记的旋律Hook"},
+        {"position": "1:10-1:50", "section": "Verse 2", "content": "故事情节发展"},
+        {"position": "1:50-2:10", "section": "Chorus", "content": "可以加入第二声部和声"},
+        {"position": "2:10-2:40", "section": "Instrumental", "content": "口琴/小提琴/吉他solo"},
+        {"position": "2:40-3:20", "section": "Verse 3 (Twist)", "content": "故事转折/情感高潮"},
+        {"position": "3:20-3:40", "section": "Chorus (升华)", "content": "更强烈的情感表达"},
+        {"position": "3:40-4:00", "section": "Outro", "content": "口白/渐弱/重复Hook fade-out"}
+      ]
+    },
+
+    "time_based_structure_optimization": {
+      "15s_clip": {
+        "context": "短视频/Reels/Shorts配乐",
+        "strategy": "前5秒Hook吸引, 中间旋律滚动, 最后定格",
+        "structure": "前奏(2s) → 副歌高潮(10s) → 收束(3s)"
+      },
+      "30s_clip": {
+        "context": "短视频/广告/片头",
+        "strategy": "快速建立情绪, 副歌抢先, 记忆点在10秒处",
+        "structure": "Intro(4s) → Chorus(12s) → Verse片段(8s) → Chorus尾(6s)"
+      },
+      "60s_demo": {
+        "context": "音乐Demo/试听/片花",
+        "strategy": "展现完整结构但压缩",
+        "structure": "Intro(8s) → Verse 1(16s) → Pre-Chorus(8s) → Chorus(16s) → Bridge(12s) → Outro(8s)"
+      },
+      "3min_full": {
+        "context": "商业流行歌曲标准长度",
+        "strategy": "三分钟完美结构, 电台友好",
+        "structure": "Standard Pop Structure如上"
+      },
+      "5min_plus": {
+        "context": "艺术型/剧场型/Progressive",
+        "strategy": "更多空间发展主题, 可加入多段落, 间奏, 渐进变化",
+        "structure": "Intro → Verse1 → Chorus → Verse2 → Chorus → Instrumental Break/Bridge → Verse3(变调) → Chorus ×2(加花) → Outro/Fade-out"
+      }
+    }
+  },
+
+  "vocal_techniques": {
+    "description": "声乐技法大全, 按流派和方法分类",
+    "by_genre": {
+      "pop_vocals": {
+        "techniques": ["通俗唱法(自然发声)", "气声(Breathy)", "假声(Falsetto)", "混声(Mixed Voice)", "转音(Melisma/Runs)", "颤音(Vibrato)"],
+        "characteristics": "自然, 情感真挚, 技巧服务于情感, 呼吸支撑",
+        "representative_artists": ["Adele(混声/气声)", "Whitney Houston(转音)", "王菲(气声/空灵)"]
+      },
+      "bel_canto": {
+        "description": "美声唱法 - 意大利传统, 歌剧演唱",
+        "techniques": ["胸腔共鸣", "头腔共鸣", "混声支持", "Legato(连贯)", "Coloratura(花腔)", "声区统一"],
+        "characteristics": "宏大音量, 共鸣丰富, 穿透力强, 无麦克风亦可",
+        "representative_artists": ["Luciano Pavarotti", "Maria Callas", "Plácido Domingo"]
+      },
+      "chinese_folk_vocal": {
+        "description": "民族唱法 - 中国民族声乐传统",
+        "techniques": ["真声为主", "甜美音色", "方言咬字", "戏曲腔调融合", "大本嗓", "唱腔中的装饰音"],
+        "characteristics": "音色清亮甜美, 注重韵味和地方色彩",
+        "representative_artists": ["宋祖英", "李谷一", "郭兰英"]
+      },
+      "chinese_opera_style": {
+        "description": "戏腔 - 融合中国传统戏曲唱法",
+        "techniques": ["假声(小嗓/大嗓)", "真假声转换", "拖腔", "颤音(抖音)", "本嗓(真声)", "咬字戏曲化"],
+        "characteristics": "独特的戏曲韵味, 华丽的装饰音, 表情丰富",
+        "representative_artists": ["霍尊(卷珠帘)", "李玉刚(新贵妃醉酒)", "王佩瑜(京剧)"]
+      },
+      "metal_screaming": {
+        "description": "嘶吼/极端唱法 - 金属和硬核风格",
+        "techniques": ["Growl(兽吼)", "Scream(尖啸)", "False Chord(假声带)", "Pig Squeal", "Fry Scream", "Inhale(吸吼)"],
+        "characteristics": "极端音色需要专业训练保护声带",
+        "representative_artists": ["Mikael Åkerfeldt(Opeth)", "Randy Blythe(Lamb of God)", "Phil Anselmo(Pantera)"]
+      },
+      "rap_vocals": {
+        "description": "说唱/Rap唱法",
+        "techniques": ["Flow(节奏流)", "Punchline(重音收束)", "Breath Control(换气)", "Double Time(双倍速)", "Syncopation(切分)", "Cadence(语调)"],
+        "characteristics": "节奏感>音高, 词密度高, 声调变化丰富",
+        "representative_artists": ["Eminem", "Kendrick Lamar", "MC HotDog", "AR刘夫阳"]
+      },
+      "jazz_vocals": {
+        "description": "爵士唱法",
+        "techniques": ["Scat(即兴拟声)", "Swing Phrasing(摇摆乐句)", "蓝调音(Blues Notes)", "滑音(Portamento/Slide)", "即兴变奏"],
+        "characteristics": "即兴性, 灵活的节奏掌控, 自由的旋律变化",
+        "representative_artists": ["Ella Fitzgerald", "Billie Holiday", "Louis Armstrong", "Frank Sinatra"]
+      },
+      "rock_vocals": {
+        "description": "摇滚唱法",
+        "techniques": ["Belting(强声带)", "Rasp/Grit(沙哑)", "头声翻高", "呐喊式唱法", "喉音摩擦"],
+        "characteristics": "力量感, 情感爆发, 音色粗粝有辨识度",
+        "representative_artists": ["Freddie Mercury(Queen)", "Robert Plant(Led Zeppelin)", "Chris Cornell"]
+      }
+    },
+
+    "specific_techniques": {
+      "breathy_voice": {
+        "pinyin": "气声",
+        "description": "发声时不完全闭合声带, 让空气和声音同时出来",
+        "effect": "亲密, 性感, 脆弱, 空灵",
+        "how_to": "想象在叹息中唱歌, 保持气息流动, 但不完全推动声带闭合"
+      },
+      "falsetto": {
+        "pinyin": "假声",
+        "description": "声带边缘振动产生的高音音色",
+        "effect": "轻盈, 柔软, 音高范围扩展",
+        "how_to": "声带变薄拉长, 只边缘振动, 气息支持需稳定"
+      },
+      "mixed_voice": {
+        "pinyin": "混声",
+        "description": "胸声和头声的混合, 无断层过渡",
+        "effect": "统一音区, 强大的高音而不费力",
+        "how_to": "找到胸声和头声的平衡点, 在换声区训练过渡"
+      },
+      "melisma": {
+        "pinyin": "转音",
+        "description": "在一个音节上唱多个不同音高",
+        "effect": "装饰性, 技巧展示, 情感强化",
+        "how_to": "控制气息稳定, 清晰的音高变化, 从慢速练习"
+      },
+      "anger_vocal_rasp": {
+        "pinyin": "怒音",
+        "description": "带有愤怒和力量感的粗粝音色",
+        "effect": "力量, 侵略性, 戏剧化表达",
+        "how_to": "增加喉部紧张度, 声带摩擦, 强力呼气"
+      },
+      "slide_portamento": {
+        "pinyin": "滑音",
+        "description": "在两个音之间平滑滑动不间歇",
+        "effect": "情感化, 爵士感, 口语化",
+        "how_to": "从一个音开始用气息带往下一个音, 不中断"
+      },
+      "crying_voice": {
+        "pinyin": "哭腔",
+        "description": "带有哭泣感的唱腔",
+        "effect": "悲伤, 感染力, 脆弱感",
+        "how_to": "加入轻微颤抖, 气息不稳定, 模仿哭泣时的发声"
+      },
+      "chanting_style": {
+        "pinyin": "诵唱",
+        "description": "介于说话和唱歌之间的表达方式",
+        "effect": "叙事, 口语化, 亲密感",
+        "how_to": "保持音高但在旋律线上说话, 节奏自由"
+      },
+      "rap_rhythm": {
+        "pinyin": "Rap韵律",
+        "description": "有节奏有韵律的念白式唱法",
+        "effect": "节奏感, 叙事性, 街头感",
+        "how_to": "重音在强拍, 切分音, 注意尾韵的保持"
+      }
+    }
+  },
+
+  "instruments_and_timbres": {
+    "description": "各流派核心乐器与音色特征",
+    "rock_instruments": {
+      "electric_guitar": {
+        "role": "核心旋律和节奏乐器",
+        "timbre_variations": ["清音(Clean): 明亮清脆", "过载(Overdrive): 温暖饱和", "失真(Distortion): 粗粝有攻击性", "Fuzz: 厚重的碎裂感", "合唱(Chorus): 宽广闪烁"],
+        "iconic_sounds": ["Power Chord(强力三和弦)", "Palm Mute(手掌制音)", "Bend(推弦)", "Hammer-on/Pull-off(击勾弦)", "Whammy Bar(摇把)"]
+      },
+      "bass_guitar": {
+        "role": "低频根基和节奏锚点",
+        "timbre_variations": ["拨弦(Picked): 明亮攻击性", "指弹(Fingerstyle): 温暖圆润", "Slap: 打弦颗粒感", "失真贝斯: 重型音乐特色"],
+        "iconic_sounds": ["Walking Bass(行走贝斯)", "Root-Fifth(根音五度)", "Syncopated Line(切分线条)"]
+      },
+      "drums": {
+        "role": "节奏骨架和力度驱动",
+        "components": ["Kick(底鼓): 低频冲击", "Snare(军鼓): 中高频 Crack", "Hi-hat(踩镲): 时间感", "Tom-tom(桶鼓): Fill填充", "Crash/Ride(镲片): 高潮/节奏"]
+      }
+    },
+    "pop_instruments": {
+      "synth": {
+        "role": "和声铺底, 旋律, 音效",
+        "timbre_variations": ["Pad(铺垫): 温暖宽广", "Lead(主音): 明亮穿透", "Pluck(拨奏): 清脆短促", "Bass(贝斯): 深沉厚重", "Arp(琶音): 闪烁流动"],
+        "iconic_models": ["Roland Juno-106(温暖模拟)", "Yamaha DX7(FM数字, 电钢琴音)", "Moog Minimoog(厚重贝斯)", "Korg M1(80年代标志音色)"]
+      },
+      "drum_machine": {
+        "role": "精确编程的电子节奏",
+        "iconic_models_sounds": ["Roland TR-808: 标志性底鼓, 重金属镲片", "Roland TR-909: 强劲底鼓, 温暖军鼓", "LinnDrum: 80年代流行/舞曲", "MPC系列: Hip-hop采样鼓机"]
+      },
+      "grand_piano": {
+        "role": "和弦基础, 旋律, 独奏",
+        "timbre_variations": ["明亮立式钢琴", "温暖三角钢琴", "电子钢琴(EP)", "Clavinet(放克特色)"],
+        "techniques": ["Block Chords(块状和弦)", "Arpeggiated(琶音)", "Octave Jumps(八度跳进)"]
+      }
+    },
+    "electronic_instruments": {
+      "modular_synth": {
+        "role": "无限可能的音色设计",
+        "features": ["模块化连接", "CV/Gate控制", "模拟信号路径", "Patch编程"],
+        "iconic_sounds": ["Acid Bass(303式)", "Sequence(序列)", "Drone(持续音)", "Random(随机)"]
+      },
+      "sampler": {
+        "role": "声音录制, 切分, 重组",
+        "techniques": ["Chop(切分)", "Stretch(拉伸)", "Reverse(反转)", "Pitch Shift(变调)", "Granular(粒子合成)"]
+      },
+      "fm_synthesizer": {
+        "role": "数字调频合成, 金属/钟声/电钢琴音色",
+        "famous_patches": ["DX7 E.Piano(经典电钢琴)", "Bell(钟声)", "Brass(铜管)"]
+      }
+    },
+    "chinese_traditional_instruments": {
+      "erhu": {
+        "classification": "弓弦乐器(二根弦)",
+        "timbre": "如泣如诉, 接近人声, 极富表现力",
+        "techniques": ["滑音(Glissando)", "揉弦(Vibrato)", "顿弓(Staccato)", "连弓(Legato)"],
+        "role": "主旋律, 情感核心",
+        "iconic_songs": ["二泉映月", "赛马"]
+      },
+      "guzheng": {
+        "classification": "弹拨乐器(21-25弦)",
+        "timbre": "清脆明亮, 流水般清澈",
+        "techniques": ["刮奏(Glide)", "按音(Bend)", "颤音(Tremolo)", "摇指(Fast Picking)"],
+        "role": "主旋律, 华彩段落, 氛围营造",
+        "iconic_songs": ["高山流水", "渔舟唱晚"]
+      },
+      "pipa": {
+        "classification": "弹拨乐器(四弦,竖抱)",
+        "timbre": "铿锵有力, 颗粒感强, 表现力丰富",
+        "techniques": ["轮指(Wheel Fingering)", "扫弦(Strum)", "推拉弦(Bend)", "绞弦"],
+        "role": "独奏, 合奏主旋律, 武曲表现力",
+        "iconic_songs": ["十面埋伏", "春江花月夜"]
+      },
+      "bamboo_flute_dizi": {
+        "classification": "吹管乐器(竹笛)",
+        "timbre": "明亮悠扬, 清脆穿透",
+        "techniques": ["气震音(Vibrato)", "滑音", "吐音(Tonguing)", "花舌(Flutter)", "历音"],
+        "role": "主旋律, 华彩, 山水意境",
+        "iconic_songs": ["姑苏行", "扬鞭催马运粮忙"]
+      },
+      "xiao": {
+        "classification": "吹管乐器(竖吹)",
+        "timbre": "深沉悠远, 忧郁, 古朴",
+        "role": "氛围铺底, 抒情段落",
+        "iconic_songs": ["平湖秋月"]
+      },
+      "suona": {
+        "classification": "吹管乐器(唢呐)",
+        "timbre": "高亢明亮, 极具穿透力, 喜庆或悲壮",
+        "techniques": ["循环换气", "滑音", "花舌"],
+        "role": "节日喜庆, 戏曲配器, 特色独奏",
+        "iconic_songs": ["百鸟朝凤"]
+      },
+      "gugin": {
+        "classification": "弹拨乐器(七弦琴)",
+        "timbre": "深沉宁静, 内敛, 文人之音",
+        "techniques": ["泛音(Harmonics)", "固定音高对位"],
+        "role": "文人音乐核心, 独奏, 修身养性",
+        "iconic_songs": ["广陵散", "梅花三弄"]
+      },
+      "chinese_percussion": {
+        "instruments": ["大堂鼓", "排鼓", "锣", "钹", "木鱼", "梆子"],
+        "role": "节奏骨架, 节日气氛, 戏曲伴奏"
+      }
+    },
+    "world_music_instruments": {
+      "sitar": {
+        "origin": "印度",
+        "timbre": "嗡嗡持续的共鸣, 复杂的泛音列",
+        "techniques": ["Meend(滑音)", "Gamak(装饰颤音)", "Jhala(快速琶音)"],
+        "role": "印度古典音乐主旋律乐器"
+      },
+      "tabla": {
+        "origin": "印度",
+        "timbre": "清脆高音Dayan和深沉低音Bayan",
+        "techniques": ["严格的手指打击技术", "数十种音色(Bols)", "Tala节奏循环"],
+        "role": "印度古典音乐节奏核心"
+      },
+      "shakuhachi": {
+        "origin": "日本",
+        "timbre": "气息感强, 质朴, 禅意",
+        "techniques": ["Meriyasu(下降的滑音)", "Kara-kara(吹奏同时的杂音)", "Muraiki(爆发气息)"],
+        "role": "禅宗音乐, 冥想, 传统曲目"
+      },
+      "koto": {
+        "origin": "日本",
+        "timbre": "清脆如水, 典雅",
+        "techniques": ["Tsume(指甲拨弦)", "Kakite(片手)", "Ren(slide)", "Oshide(压奏)"],
+        "role": "日本传统雅乐/独奏"
+      },
+      "shamisen": {
+        "origin": "日本",
+        "timbre": "尖锐穿透, 丰富的摩擦感",
+        "role": "民谣, 歌舞伎, 津轻三味线独奏"
+      },
+      "djembe": {
+        "origin": "西非(马林克族)",
+        "timbre": "三个主要音色: 低频Bass, 中频Tone, 高频Slap",
+        "role": "节奏主旋律, 舞乐核心"
+      },
+      "udu": {
+        "origin": "尼日利亚/非洲",
+        "timbre": "水壶状陶罐, 空灵的水声共鸣",
+        "role": "氛围打击乐"
+      },
+      "didgeridoo": {
+        "origin": "澳大利亚原住民",
+        "timbre": "低沉的Drone, 持续的震动, 模拟自然声音",
+        "techniques": ["循环呼吸", "舌颤音", "动物叫声模仿"],
+        "role": "仪式音乐, 现代氛围音乐"
+      },
+      "panpipes_zampona": {
+        "origin": "安第斯山脉(南美)",
+        "timbre": "轻柔空灵的排箫音色",
+        "role": "安第斯民族音乐核心"
+      },
+      "charango": {
+        "origin": "安第斯(南美)",
+        "timbre": "高亢明亮的小型弦乐器(犰狳壳制)",
+        "role": "安第斯民族音乐旋律乐器"
+      },
+      "accordion": {
+        "origin": "欧洲/俄罗斯/阿根廷(班多钮手风琴)",
+        "timbre": "丰富的和声和旋律, 可抒情可欢快",
+        "role": "民谣, 探戈, 法国Musette, Zydeco"
+      },
+      "balalaika": {
+        "origin": "俄罗斯",
+        "timbre": "三角型, 明亮拨弦声",
+        "role": "俄罗斯民间音乐"
+      }
+    }
+  },
+
+  "ethnic_music_characteristics": {
+    "description": "各地民族音乐特征",
+    "chinese_pentatonic": {
+      "name": "中国五声音阶",
+      "scale": "宫-商-角-徵-羽 (Do-Re-Mi-Sol-La)",
+      "characteristics": [
+        "无半音(Fa和Si缺失), 音阶空洞美感",
+        "五种调式(宫调式/商调式/角调式/徵调式/羽调式)",
+        "以五声为核心, 偏音(Fa/Si)作为装饰音",
+        "旋律线条以级进为主, 大跳少"
+      ],
+      "emotional_mapping": {
+        "宫调式(Do)": "稳重平和, 帝王之音",
+        "商调式(Re)": "悲凉伤感, 秋思",
+        "角调式(Mi)": "清新悠远, 山林",
+        "徵调式(Sol)": "欢快明亮, 喜乐",
+        "羽调式(La)": "哀婉抒情, 水之音"
+      },
+      "traditional_form_features": "散-慢-中-快的板式结构, 起承转合的曲式, 倚音大量的装饰音"
+    },
+    "japanese_toitsu_yonanuki": {
+      "name": "日本都节音阶/阳音阶",
+      "scales": {
+        "in_senpou_yonanuki": {
+          "description": "阴旋法/都节音阶 - Mi-Fa-La-Si-Do-Mi",
+          "scale": "Mi-Fa-La-Si-Do (E-F-A-B-C)",
+          "characteristics": ["两个半音间隔(Fa和Do), 独特的忧伤感", "日本传统音乐最常见音阶"]
+        },
+        "yo_senpou_ryo_sen": {
+          "description": "阳旋法/吕音阶 - Do-Re-Fa-Sol-La-Do",
+          "scale": "Do-Re-Fa-Sol-La (C-D-F-G-A)",
+          "characteristics": ["明亮, 与中国五声相似但有差异", "洋楽(西方音乐)影响前使用"]
+        }
+      },
+      "characteristics": [
+        "半音程的频繁使用创造独特的日本感",
+        "强调音与音之间的空白(间/Ma)",
+        "不使用和声, 单旋律线条为主",
+        "装饰音(尤其是下降的滑音)非常丰富"
+      ]
+    },
+    "indian_raga": {
+      "name": "印度拉格体系",
+      "description": "Raga是印度古典音乐的旋律框架, 有特定的音阶、装饰音和情感时间对应",
+      "core_concepts": [
+        "Raga(拉格): 旋律框架, 每个Raga有特定的音阶和特征乐句",
+        "Tala(塔拉): 节奏循环体系, 复杂的拍子结构(如16拍Tintal)",
+        "Shruti: 微分音(22个微音程), 比西方半音更精细的分割",
+        "Gamak: 独特的装饰音技术, 在两个音之间滑动",
+        "Alap: 即兴引入, 慢速, 无节奏",
+        "Samay: 特定Raga在特定时段演奏(晨/午/晚/夜)"
+      ],
+      "sample_ragas": {
+        "Yaman": "黄昏拉格, 庄严浪漫",
+        "Bhairav": "晨间拉格, 虔诚宁静",
+        "Malkauns": "深夜拉格, 深沉忧郁",
+        "Kafi": "春天的拉格, 柔和甜蜜"
+      },
+      "emotional_system": "Rasa(味, 9种情感): 情爱/欢愉/悲悯/暴戾/英勇/恐惧/厌恶/惊异/平静"
+    },
+    "arabic_maqam": {
+      "name": "阿拉伯木卡姆体系",
+      "description": "Maqam是阿拉伯音乐的音阶模式体系, 包含四音列(Jins)",
+      "characteristics": [
+        "包含四分之三音(3/4音), 即中立音程, 非微分音也非半音",
+        "约100+种Maqam, 常用约30种",
+        "Maqam与特定情感和时段对应",
+        "装饰音异常丰富, 即兴程度高(Taqsim)",
+        "节奏模式(Iqa'at)约100+种"
+      ],
+      "sample_maqams": {
+        "Rast": "基础Maqam, 勇敢自豪",
+        "Bayati": "最常见的Maqam, 忧伤柔和",
+        "Hijaz": "最易识别的Maqam, 异域风情(俗称'阿拉伯音阶')",
+        "Saba": "悲伤凄美的Maqam",
+        "Nahawand": "类似西方小调, 浪漫"
+      },
+      "typical_instruments": ["Oud(乌德琴)", "Qanun(卡农琴)", "Ney(奈伊笛)", "Darbuka(达布卡鼓)", "小提琴"]
+    },
+    "celtic_music": {
+      "name": "凯尔特音乐",
+      "characteristics": [
+        "旋回旋律(Circular Melody) - 旋律频繁回到主音",
+        "舞蹈节奏: Jig(6/8), Reel(4/4), Hornpipe(2/4或4/4), Slip Jig(9/8)",
+        "调式音乐为主: Dorian, Mixolydian, Aeolian模式常见",
+        "大量装饰音: Cuts, Rolls, Triplets",
+        "Call-and-Response在合奏中的使用",
+        "旋律的'AABA'结构或'AABB'结构"
+      ],
+      "regional_styles": {
+        "Irish": "最具代表性的凯尔特传统, 强调小提琴和锡哨",
+        "Scottish": "风笛传统(Highland Pipes), Strathspey节奏",
+        "Breton": "法国布列塔尼, 手风琴和风笛合奏",
+        "Welsh": "竖琴传统, Penillion歌唱"
+      }
+    },
+    "african_music": {
+      "name": "非洲音乐",
+      "characteristics": [
+        "多节奏(Polyrhythm) - 不同节奏层同时进行",
+        "Call-and-Response(呼应对唱) - 领袖与合唱问答",
+        "律动驱动 - 节奏>旋律, 重复性模式(Ostinato)",
+        "复合节奏模式: 3:4, 3:2, 4:6等多重叠加",
+        "五声音阶和六声音阶为主",
+        "打击乐主导, 旋律乐器为辅",
+        "功能性音乐 - 与生活/仪式/劳动紧密结合",
+        "音色调性丰富(Talking Drum可模拟语言)"
+      ],
+      "regional_variations": {
+        "West_Africa": "Djembe/Doundoun传统, Griot(格里奥)传承史诗, Kora科拉琴",
+        "Central_Africa": "Pygmy音乐的多层复调, 声部间模仿自然",
+        "East_Africa": "珠拉(Drone)音乐, 齐特琴丰富",
+        "South_Africa": "Mbube合唱传统, Isicathamiya(无伴奏合唱)"
+      }
+    },
+    "latin_american_music": {
+      "name": "拉丁美洲音乐",
+      "characteristics": [
+        "Clave模式 - 2-3或3-2的五拍节奏模式, 核心结构",
+        "切分音(Syncopation) - 重音不在强拍的强烈节奏感",
+        "欧洲(西班牙/葡萄牙)旋律+非洲节奏+美洲原住民元素的融合",
+        "和声上以I-IV-V为基础, 但节奏远超西方的复杂性"
+      ],
+      "key_rhythms": {
+        "Samba": "2/4拍, 密集16分音符, 巴西嘉年华节奏",
+        "Bossa_Nova": "Samba节奏简化版, 吉他切分, 轻柔优雅",
+        "Salsa": "Clave模式, Montuno钢琴, 铜管切分",
+        "Tango": "2/4或4/4, 停-走模式, 强烈戏剧感",
+        "Rumba": "非洲-古巴, 3-2 Clave, Conga主导",
+        "Cumbia": "哥伦比亚, 重复贝斯线, 笛子和打击乐",
+        "Reggaeton": "Dembow节奏(底鼓在每拍+Snare切分)"
+      }
+    }
+  },
+
+  "multilingual_lyric_writing": {
+    "description": "不同语言的歌词创作技巧",
+    "chinese": {
+      "description": "中文歌词创作 - 单音节语言, 四声体系, 意象凝练",
+      "characteristics": [
+        "单音节语言 - 每个字一个音节, 词意高度凝练",
+        "四声系统 - 每个字有四个声调(阴平/阳平/上声/去声)",
+        "押韵丰富 - 一个韵母可以对应大量汉字",
+        "对仗传统 - 字数相等、结构对应的美学传统",
+        "千字文式的意象 - 极少的字表达极深的意境"
+      ],
+      "techniques": {
+        "tone_melody_matching": {
+          "description": "声调与旋律匹配",
+          "principle": "歌词的声调走向应该与旋律走向一致, 否则会出现'倒字'",
+          "example": "阴平(高平)→旋律高音, 上声(降升)→旋律下降再上升"
+        },
+        "antithetical_couplets": {
+          "description": "对仗工整",
+          "technique": "字数一致、词性相对、平仄相反、意象呼应",
+          "example": "春蚕到死丝方尽 / 蜡炬成灰泪始干",
+          "tips": "流行歌词中不必严格对仗, 但方向感对即可"
+        },
+        "xiangzheng_yiyi": {
+          "description": "意象堆叠与象征",
+          "technique": "通过古典意象的堆叠传递复杂情感",
+          "example": "断桥/残雪/孤雁/落花/寒江(每个都自带情感符号)",
+          "tips": "方文山的歌词最擅长此道, 适合中国风歌曲"
+        },
+        "classical_allusion": {
+          "description": "古典用典",
+          "technique": "借用历史故事、诗词名句、典故",
+          "example": "周杰伦-《青花瓷》用汝窑瓷, 《烟花易冷》用洛阳伽蓝记",
+          "tips": "适合古风和中国风, 需注意不宜过度晦涩"
+        },
+        "four_character_pattern": {
+          "description": "四字格节奏",
+          "technique": "2+2的节奏模式, 成语式凝练",
+          "example": "天长地久 / 沧海桑田 / 物是人非 / 一眼万年"
+        },
+        "reduplication_overlap": {
+          "description": "叠字复叠",
+          "technique": "字的重复使用增强韵律和情感",
+          "example": "慢慢/轻轻/渐渐/声声慢/寻寻觅觅/冷冷清清"
+        }
+      },
+      "rhyme_optimization": {
+        "tips": [
+          "中文韵脚丰富的韵部: ang/iang/uang(洪亮), an/ian/uan(开阔), ai/uai(哀婉)",
+          "建议使用宽韵(ang, an, a, i)避免窄韵(iu, ui, ue)",
+          "rap歌词可用叠韵加强密度",
+          "整曲换韵2-3次, 配合情感转折"
+        ]
+      }
+    },
+
+    "english": {
+      "description": "英文歌词创作 - 多音节语言, 轻重音系统, 头韵传统",
+      "characteristics": [
+        "多音节语言 - 单词由多个音节组成",
+        "轻重音(Stressed/Unstressed) - 节奏的基础",
+        "丰富的押韵可能性 - 完美韵/近韵/多重韵",
+        "头韵传统 - Alliteration在英语诗歌中的地位重要",
+        "连读和弱化 - 自然语流影响歌词的节奏"
+      ],
+      "techniques": {
+        "stress_pattern": {
+          "description": "轻重音模式匹配旋律",
+          "principle": "重音必须落在强拍, 轻音落在弱拍",
+          "example": "I WAN-na hold your HAND (强调音节在强拍上)"
+        },
+        "alliteration": {
+          "description": "头韵 - 相邻词的开头辅音相同",
+          "example": "\"Sally sells sea shells\" / \"Wicked wind whips\"",
+          "effect": "增加韵律感和记忆点, rap中极为常见"
+        },
+        "multisyllabic_rhyme": {
+          "description": "多音节押韵 - 多个音节同时押韵",
+          "example": "Bacardi / party-hearty / ",
+          "tips": "Rap歌词中最炫技的押韵方式, Eminem为大师"
+        },
+        "assonance_consonance": {
+          "description": "元音协韵/辅音协韵",
+          "assonance": "元音相同(如: feet/meet/deep)",
+          "consonance": "辅音相同(如: wind/hand/land)"
+        }
+      },
+      "structural_tips": [
+        "Hook句通常4-8个词, 保持简洁抓耳",
+        "Bridge段常用长短句交替增加变化",
+        "英文歌词中代词(I/You/We)在副歌中的使用增加代入感",
+        "多音节词放在句末可创造更丰富的节奏多样性"
+      ]
+    },
+
+    "japanese": {
+      "description": "日文歌词创作 - 假名节奏, 语尾押韵, 汉字与假名的视觉节奏",
+      "characteristics": [
+        "假名(五十音)是音节文字, 每个假名一个节拍",
+        "日语的音拍(Mora)节奏系统 - 长音/促音各有计时",
+        "语尾押韵(て形/ます形/た形等语法词的运用)",
+        "汉字(当て字)可自由赋予不同读音",
+        "语尾的助词(ね/よ/かな/だろう)可增强抒情性"
+      ],
+      "techniques": {
+        "mora_count": {
+          "description": "音拍计数",
+          "principle": "日语歌词每行的音拍数需一致(类似古汉语的近体诗)",
+          "example": "俳句的5-7-5, 歌词中常见7-5或8-6的节奏单位"
+        },
+        "phrase_end_rhyme": {
+          "description": "语尾押韵",
+          "technique": "利用日语的语法助词和语尾进行押韵",
+          "example": "~た(ta)/~だ(da), ~く(ku)/~す(su), ~ない(nai)/~たい(tai)",
+          "tips": "J-Pop歌词中大量使用, 不刻意但自然"
+        },
+        "dakuten_handakuten": {
+          "description": "浊音/半浊音的音色效果",
+          "technique": "浊音(が/ざ/だ/ば)比清音(か/さ/た/は)更厚重, 用于表达沉重情感"
+        },
+        "kakekotoba": {
+          "description": "挂词(双关) - 同音词双关",
+          "example": "松(まつ, 松树/等待), 秋(あき, 秋天/厌倦)"
+        }
+      },
+      "typical_structures": [
+        "句末常用: ～よ(强调), ～ね(寻求同意), ～な(感叹), ～かも(可能)",
+        "动词て形结尾制造进行感(～てい)或连接感(～て)",
+        "J-Pop的副歌通常有反复的拟声词(ラララ/やあ等)"
+      ]
+    },
+
+    "korean": {
+      "description": "韩文歌词创作 - 韩文字母, 尾韵丰富, 拟声词发达",
+      "characteristics": [
+        "韩文(한글)是表音文字, 字母组合成方块字",
+        "尾韵体系发达 - 韵尾(받침)系统增加了丰富的韵脚可能性",
+        "拟声词/拟态词极为丰富, 音乐中使用频繁",
+        "多音节词和汉源词(한자어)的多重选择"
+      ],
+      "techniques": {
+        "batchim_rhyme": {
+          "description": "韵尾押韵",
+          "technique": "利用丰富的韩文韵尾(7种)进行押韵",
+          "example": "~다(da)/~까(kka), ~네(ne)/~게(ge), ~죠(jyo)/~요(yo)"
+        },
+        "syllable_count": {
+          "description": "音节数控制",
+          "technique": "每行音节数一致, 典型的K-Pop歌词每行8-12音节"
+        },
+        "hansu_repetition": {
+          "description": "韩语特有的重复结构",
+          "technique": "利用韩语丰富的连接语尾制造重复的句尾模式"
+        }
+      },
+      "kpop_lyric_features": [
+        "英文单词频繁插入(Konglish混用)",
+        "感性化的呼语(Oh/Baby/Yeah等)",
+        "拟声词大量使用(K-Pop的Dance Break段)",
+        "多人组合的歌唱分配(主唱/Rap/副歌/和声)"
+      ]
+    }
+  },
+
+  "songwriting_process_recommendations": {
+    "description": "歌曲创作流程建议, 针对HeartMuLa模型生成优化",
+    "generation_workflows": {
+      "lyrics_first": {
+        "description": "先词后曲 - 适合叙事性强的歌曲",
+        "steps": [
+          "确定主题和情感基调",
+          "选择歌词结构(流行/民谣/说唱)",
+          "确定押韵方案(如仅限副歌押韵)",
+          "写作主歌(叙事)和副歌(情感核心)",
+          "调整声调和旋律配合度"
+        ]
+      },
+      "tags_first": {
+        "description": "先确定标签再生成 - 适合HeartMuLa模型",
+        "recommended_tags_order": [
+          "Genre (流派): e.g. dream_pop, lo-fi_hiphop",
+          "Mood/Emotion: e.g. melancholic, euphoric",
+          "BPM: specific number or range",
+          "Key/Tonality: e.g. C major, A minor",
+          "Instrumentation: core instruments list",
+          "Lyric Theme: e.g. love, nature, nostalgia",
+          "Vocal Style: e.g. breathy, rap, falsetto",
+          "Structure: e.g. pop_standard, folk_narrative",
+          "Language: zh, en, ja, ko, mix"
+        ]
+      },
+      "hybrid": {
+        "description": "混合模式 - 生成后迭代优化",
+        "steps": [
+          "用tags生成音乐骨架",
+          "用keywords生成初始歌词",
+          "人工/迭代修改歌词结构与押韵",
+          "调整人声风格和情感表达",
+          "最终打磨"
+        ]
+      }
+    }
+  }
+}

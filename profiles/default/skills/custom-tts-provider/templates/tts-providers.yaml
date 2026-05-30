@@ -1,0 +1,86 @@
+# ── TTS Provider Configuration ──
+# Copy this into the 'providers:' section of your profile's config.yaml
+# Switch active provider by changing 'tts.provider' in config.yaml
+# See SKILL.md for voice-switching workflow and troubleshooting
+#
+# Verified working: May 6, 2026 (lover profile)
+
+tts:
+  provider: volcengine-pillow  # ← switch this to change active voice
+
+  # ── Built-in providers (Hermes native) ──
+  edge:
+    voice: en-US-AriaNeural
+  elevenlabs:
+    voice_id: pNInz6obpgDQGcFmaJgB
+    model_id: eleven_multilingual_v2
+  openai:
+    model: gpt-4o-mini-tts
+    voice: alloy
+  xai:
+    voice_id: eve
+    language: en
+    sample_rate: 24000
+    bit_rate: 128000
+  mistral:
+    model: voxtral-mini-tts-2603
+    voice_id: c69964a6-ab8b-4f8a-9465-ec0925096ec8
+  neutts:
+    ref_audio: ''
+    ref_text: ''
+    model: neuphonic/neutts-air-q4-gguf
+    device: cpu
+  piper:
+    voice: en_US-lessac-medium
+
+  # ── Custom Volcengine Providers ──
+  providers:
+    # 铁心男友 — Default / general purpose
+    volcengine-tiexin:
+      type: command
+      command: python3 ~/.hermes/scripts/volcengine_tts.py -t {text_path} -o {output_path}
+        -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: ICL_zh_male_tiexinnanyou_tob
+      max_text_length: 5000
+
+    # 枕边低语 — Pillow talk / dirty talk / seduction
+    # Voice: ICL_zh_male_asmryexiu_tob
+    # NOTE: Does NOT support emotion parameter. DO NOT add -e flag.
+    # Best for: raw aggressive dirty talk, teasing, seductive whispers
+    volcengine-pillow:
+      type: command
+      command: python3 ~/.hermes/scripts/volcengine_tts.py -t {text_path} -o {output_path}
+        -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: ICL_zh_male_asmryexiu_tob
+      max_text_length: 5000
+
+    # 冷酷哥哥 — Dominant / master roleplay
+    # Voice: lengkugege_emo_v2
+    # Supports emotion: use voice::emotion format (e.g., lengkugege_emo_v2::intimate)
+    # Available emotions: neutral, happy, sad, angry, love, intimate, gentle, serious
+    volcengine-lengku-intimate:
+      type: command
+      command: python3 ~/.hermes/scripts/volcengine_tts.py -t {text_path} -o {output_path}
+        -v {voice} -s 0.9 -p 0.95 -e intimate
+      output_format: ogg
+      voice: lengkugege_emo_v2::intimate
+      max_text_length: 5000
+
+    # 温暖阿虎 — Daily / warm / gentle
+    # Voice: zh_male_wennuanahu_uranus_bigtts
+    # NOTE: Does NOT support emotion parameter. DO NOT add -e flag.
+    volcengine-warm:
+      type: command
+      command: python3 ~/.hermes/scripts/volcengine_tts.py -t {text_path} -o {output_path}
+        -v {voice} -s 0.9 -p 0.95
+      output_format: ogg
+      voice: zh_male_wennuanahu_uranus_bigtts
+      max_text_length: 5000
+
+# ── DEPRECATED / BROKEN ──
+# Do NOT use these voice IDs — they are 403'd on Volcengine API:
+#   zh_male_qingyiyuxuan_mars_bigtts  (= 阳光阿辰)
+#   xiaonaigou_edf58cf28b8b_tob       (= 奶气小生)
+# These were previously the "温柔调情" and "做0被操" voices.

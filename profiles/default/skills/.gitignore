@@ -1,0 +1,5 @@
+# Ignore Hermes runtime-generated files
+.curator_*
+.bundled_manifest
+.usage.json
+.usage.json.lock
