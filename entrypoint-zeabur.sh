@@ -8,6 +8,14 @@ echo "=== [zeabur-entry] Starting Hermes + TDAI ==="
 # Ensure /opt/data exists
 mkdir -p /opt/data
 
+# 1a. 注入角色设定（从环境变量）
+# HERMES_SOUL 包含完整的 SOUL.md 内容，部署时注入
+# 这样每个 bot 可以有独立的角色设定，不受镜像版本影响
+if [ -n "$HERMES_SOUL" ]; then
+  echo "$HERMES_SOUL" > /opt/data/SOUL.md
+  echo "=== [zeabur-entry] SOUL.md written from HERMES_SOUL env var ==="
+fi
+
 # 1. 启动 TDAI 记忆网关（后台）
 if ! curl -sf http://127.0.0.1:8420/health >/dev/null 2>&1; then
   echo "=== [zeabur-entry] Starting TDAI gateway ==="

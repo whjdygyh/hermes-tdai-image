@@ -73,8 +73,8 @@ COPY profiles/default/scripts /opt/data/scripts
 # 默认配置（支持 ${ENV_VAR} 模板变量，部署时通过 env 注入）
 COPY profiles/default/config.yaml /opt/data/config.yaml
 
-# 角色设定与灵魂文档（通用版，部署时可被 env 覆盖）
-COPY profiles/default/SOUL.md /opt/data/SOUL.md
+# 角色设定不由镜像提供——通过 HERMES_SOUL 环境变量注入
+# 见 entrypoint-zeabur.sh: 如果 HERMES_SOUL 存在则写入 /opt/data/SOUL.md
 
 # 设置权限
 RUN chmod -R o+r /opt/data/ 2>/dev/null; echo "permissions set"
