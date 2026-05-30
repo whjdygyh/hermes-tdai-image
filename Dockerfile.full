@@ -56,3 +56,8 @@ RUN NPM_ROOT=$(npm root -g); \
     tail -n 1 "${ENTRY_SCRIPT}.orig" >> "$ENTRY_SCRIPT"; \
     chmod +x "$ENTRY_SCRIPT"; \
     echo "Patched $ENTRY_SCRIPT: $(wc -l < $ENTRY_SCRIPT) lines"
+
+# Zeabur compatibility: non-s6 entrypoint
+COPY entrypoint-zeabur.sh /opt/hermes/docker/entrypoint-zeabur.sh
+ENTRYPOINT ["/opt/hermes/docker/entrypoint-zeabur.sh"]
+CMD ["gateway", "run"]
